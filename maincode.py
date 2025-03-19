@@ -12,4 +12,9 @@ WINDOW_WIDTH = 1600
 WINDOW_HEIGHT = 900
  
 WINDOW = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
-pygame.display.set_caption('My Game!')
+pygame.display.set_caption('Nomekop!')
+
+
+WINDOW.fill(BACKGROUND)
+pygame.display.update()
+  fpsClock.tick(FPS)
