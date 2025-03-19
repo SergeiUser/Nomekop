@@ -13,20 +13,49 @@ WINDOW_HEIGHT = 900
  
 WINDOW = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption('Nomekop!')
-
-enemyx = 800
+a=5
+ay=0
+enemyx = 0
 enemyy = 450
 
 looping = True
 
-While looping:
-  enemyx-=10
+
+towerloc = (10000,10000)
+while looping:
+  
+
+  enemyx +=a
+
+  if enemyx == 800:
+  	a=0
+  	ay=5
+  	enemyy -= ay
 
 
-WINDOW.fill(BACKGROUND)
+  if enemyy == 20:
+  	ay = 0
+  	enemyx=0
+  	enemyy = 450
+  	a = 5
 
-enemy = pygame.draw.circle(WINDOW, (255,0,0), (enemyx,enemyy), 20)
-pygame.display.update()
+  
+
+
+  for event in pygame.event.get() :
+    if event.type == QUIT :
+      pygame.quit()
+      sys.exit()
+    if event.type == MOUSEBUTTONDOWN:
+      towerloc=(pygame.mouse.get_pos())
+
+  WINDOW.fill(BACKGROUND)
+
+  pygame.draw.circle(WINDOW, (255,0,0), (enemyx,enemyy), 20)
+  pygame.draw.circle(WINDOW, (0,155,0), (towerloc), 10)
+  pygame.display.update()
   fpsClock.tick(FPS)
+
+ 
 
 
