@@ -10,18 +10,15 @@ pygame.init()
 
 window = pygame.display.set_mode(windowDimensions)
 
-#tower = towers.arrow(window, position=[8, 0], cellSize=cellSize)
-towersInScene = [
-        towers.arrow(
-                window,
-                position=[random.randint(0,gridSize[0]-1), random.randint(2,gridSize[1]-2)],
-                cellSize=cellSize)
-                for x in range(6)]
+towersInScene = []
+
+# Makes randomly placed towers
+#towersInScene = [towers.arrow(window,position=[random.randint(0,gridSize[0]-1), random.randint(2,gridSize[1]-2)],cellSize=cellSize)for x in range(6)]
 
 for x in range(len(towersInScene)):
         print(f"Tower {x} is: {type(towersInScene[x])}")
-cursor = towers.cursor(0,0)
 
+# Generator for enemies
 enemies = [towers.enemy(
         window,
         x = windowDimensions[0] * random.random(),
@@ -29,7 +26,11 @@ enemies = [towers.enemy(
         cellSize=cellSize,
         speed = random.uniform(3,6)
         ) for x in range(6)]
-enemies.append(cursor)
+
+
+cursor = towers.cursor(0,0)
+#enemies.append(cursor) # Makes cursor targettable by towers
+
 run = True
 while run:
         cursor.position = pygame.mouse.get_pos()
@@ -39,21 +40,41 @@ while run:
         for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                         run = False
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                        #Cell that the mouse is in
+                        mouseCell = (
+                                cursor.position[0] // cellSize[0],
+                                cursor.position[1] // cellSize[1]
+                                )
+                        if pygame.mouse.get_pressed()[0]: # Creates tower on left click
+                                towersInScene.append(towers.arrow(window, position=mouseCell, cellSize=cellSize))
 
-        #tower.position[0] = (tower.position[0] + 1) % (gridSize[0] + 2)
+                        elif pygame.mouse.get_pressed()[2]: # Deletes right clicked tower
+                                x = 0
+                                for tower in towersInScene: # Finds towers in the same cell as the mouse and deletes them
+                                        if tower.position == mouseCell:
+                                                del towersInScene[x]
+                                        else:
+                                                x += 1
 
-        for tower in towersInScene:
-                pygame.draw.circle(tower.surface, "darkgreen", (tower.drawX + tower.cellSize[0]/2, tower.drawY + tower.cellSize[1]/2), tower.range)
-        for tower in towersInScene:
+        for tower in towersInScene: #Draws cooldown circle for each tower
+                tower.drawCooldown(False)
+                # False: Fills whole circle at once as cooldownCounter decreases
+                # True : Fills circle in by quadrant as cooldownCounter decreases
+
+
+        for tower in towersInScene: # Draws each tower
                 tower.draw()
+        for tower in towersInScene: # Attacking logic for tower
                 tower.findClosestTarget(enemies)
 
         x = 0
-        for enemy in enemies:
-                enemy.draw()
-                enemy.sim()
-                if enemy.health < 0:
+        for enemy in enemies: #Enemy Logic
+                enemy.sim() # Draws enemy to screen & Moves enemy to right at it's speed
+
+                if enemy.health <= 0: # Deletes enemies if health is equal to or below zero
                         del enemies[x]
                 else:
                         x += 1
+
         pygame.display.update()
