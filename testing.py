@@ -56,6 +56,14 @@ while run:
                                                 del towersInScene[x]
                                         else:
                                                 x += 1
+                if pygame.key.get_pressed()[pygame.K_SPACE]:
+                        enemies.append(towers.enemy(
+                                        window,
+                                        x = windowDimensions[0] * random.random(),
+                                        y = (windowDimensions[1]/3) * random.random() + windowDimensions[1]/3,
+                                        cellSize=cellSize,
+                                        speed = random.uniform(3,6)
+                        ))
 
         for tower in towersInScene: #Draws cooldown circle for each tower
                 tower.drawCooldown(False)
