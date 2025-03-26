@@ -12,24 +12,10 @@ typeColour = {
 
 
 
-# Class for cursor
-class cursor:
-        health = 100
-        def __init__(self, x,y):
-                self.x = x
-                self.y = y
-                self.position = (x,y)
-
-        def draw(self): #obselete, only used for targetting by towers
-                pass
-
-        def sim(self): #obselete, only used for targetting by towers
-                print(f"Health: {self.health}")
-
 # Base class for all towers
 class towerBase:
-        range = 150
-        cooldown = 500
+        range = 1.5
+        cooldown = 200
         cooldownCounter = cooldown
         cooldownSpeed = 2.5
         drawLine = False
@@ -54,30 +40,31 @@ class towerBase:
                 # Base square drawing
                 pygameDraw.rect(self.surface, typeColour[self.type], (self.drawX + 5, self.drawY + 5, self.cellSize[0] - 10, self.cellSize[1] - 10))
 
-        def drawCooldown(self, spiral=False): # Draws cooldown circle on the tower
+        def drawCooldown(self, spiral=False): # Draws cooldown circle o>n the tower
                 towerCooldownPercentage = ((self.cooldown - self.cooldownCounter)/self.cooldown)
-                pygameDraw.circle(self.surface, "darkgreen", (self.drawX + self.cellSize[0]/2, self.drawY + self.cellSize[1]/2), self.range, 2, False) # Outline circle to show range & limit of cooldown bar
+                pygameDraw.circle(self.surface, "darkgreen", (self.drawX + self.cellSize[0]/2, self.drawY + self.cellSize[1]/2), self.range * ((self.cellSize[0]+self.cellSize[0])/2), 2, False) # Outline circle to show range & limit of cooldown bar
+                pygameDraw.circle(self.surface, "darkgreen", (self.drawX + self.cellSize[0]/2, self.drawY + self.cellSize[1]/2), self.cellSize[0], 2, False) # Outline circle to show range & limit of cooldown bar
 
                 if not spiral:
                                 # Standard Filling
-                                pygameDraw.circle(self.surface, "darkgreen", (self.drawX + self.cellSize[0]/2, self.drawY + self.cellSize[1]/2), int(self.range*towerCooldownPercentage), 0)
+                                pygameDraw.circle(self.surface, "darkgreen", (self.drawX + self.cellSize[0]/2, self.drawY + self.cellSize[1]/2), int(self.cellSize[0]*towerCooldownPercentage), 0)
 
                 else: # Spiral Filling
                         if towerCooldownPercentage < 0.25:
                                 # Top Right Quadrant filling
-                                pygameDraw.circle(self.surface, "darkgreen", (self.drawX + self.cellSize[0]/2, self.drawY + self.cellSize[1]/2), int(self.range*towerCooldownPercentage*4), 0, True)
+                                pygameDraw.circle(self.surface, "darkgreen", (self.drawX + self.cellSize[0]/2, self.drawY + self.cellSize[1]/2), int(self.cellSize[0]*towerCooldownPercentage*4), 0, True)
                         elif towerCooldownPercentage < 0.5:
                                 # Bottom Right Quadrant filling
-                                pygameDraw.circle(self.surface, "darkgreen", (self.drawX + self.cellSize[0]/2, self.drawY + self.cellSize[1]/2), int(self.range), 0, True)
-                                pygameDraw.circle(self.surface, "darkgreen", (self.drawX + self.cellSize[0]/2, self.drawY + self.cellSize[1]/2), int(self.range*(towerCooldownPercentage-0.25)*4), 0, False, False, False, True)
+                                pygameDraw.circle(self.surface, "darkgreen", (self.drawX + self.cellSize[0]/2, self.drawY + self.cellSize[1]/2), int(self.cellSize[0]), 0, True)
+                                pygameDraw.circle(self.surface, "darkgr>een", (self.drawX + self.cellSize[0]/2, self.drawY + self.cellSize[1]/2), int(self.cellSize[0]*(towerCooldownPercentage-0.25)*4), 0, False, False, False, True)
                         elif towerCooldownPercentage < 0.75:
                                 # Bottom Left Quadrant filling
-                                pygameDraw.circle(self.surface, "darkgreen", (self.drawX + self.cellSize[0]/2, self.drawY + self.cellSize[1]/2), int(self.range), 0, True, False, False, True)
-                                pygameDraw.circle(self.surface, "darkgreen", (self.drawX + self.cellSize[0]/2, self.drawY + self.cellSize[1]/2), int(self.range*(towerCooldownPercentage-0.5)*4), 0, False, False, True)
+                                pygameDraw.circle(self.surface, "darkgreen", (self.drawX + self.cellSize[0]/2, self.drawY + self.cellSize[1]/2), int(self.cellSize[0]), 0, True, False, False, True)
+                                pygameDraw.circle(self.surface, "darkgreen", (self.drawX + self.cellSize[0]/2, self.drawY + self.cellSize[1]/2), int(self.cellSize[0]*(towerCooldownPercentage-0.5)*4), 0, False, False, True)
                         else:
                                 # Top Left Quadrant filling
-                                pygameDraw.circle(self.surface, "darkgreen", (self.drawX + self.cellSize[0]/2, self.drawY + self.cellSize[1]/2), int(self.range), 0, True, False, True, True)
-                                pygameDraw.circle(self.surface, "darkgreen", (self.drawX + self.cellSize[0]/2, self.drawY + self.cellSize[1]/2), int(self.range*(towerCooldownPercentage-0.76)*4), 0, False, True)
+                                pygameDraw.circle(self.surface, "darkgreen", (self.drawX + self.cellSize[0]/2, self.drawY + self.cellSize[1]/2), int(self.cellSize[0]), 0, True, False, True, True)
+                                pygameDraw.circle(self.surface, "darkgreen", (self.drawX + self.cellSize[0]/2, self.drawY + self.cellSize[1]/2), int(self.cellSize[0]*(towerCooldownPercentage-0.76)*4), 0, False, True)
 
         def findClosestTarget(self, targets):
                 position = (self.drawX + self.cellSize[0]/2, self.drawY + self.cellSize[1]/2)
@@ -99,10 +86,11 @@ class towerBase:
 
                 targetPos = target.position
 
-                if self.cooldownCounter < 50 and dist(targetPos, position) < self.range: #Begins drawing line to target
+                if self.cooldownCounter < 50 and dist(targetPos, position) < self.range * ((self.cellSize[0]+self.cellSize[1])/2) * 1.25: #Begins drawing line to target
                         self.drawLine = True
+                        self.cooldownCounter -= self.cooldownSpeed
 
-                if self.cooldownCounter < 0 and dist(targetPos, position) < self.range: # If off cooldown then attack & Reset cooldownCounter
+                elif self.cooldownCounter < 0 and dist(targetPos, position) < self.range * ((self.cellSize[0]+self.cellSize[1])/2) and self.drawLine: # If off cooldown then attack & Reset cooldownCounter
                         self.cooldownCounter = self.cooldown
                         target.health -= self.damage
 
@@ -113,6 +101,7 @@ class towerBase:
 
                 if self.drawLine: #Draws line from tower to target if conditions are met
                         pygameDraw.line(self.surface, "red", position, targetPos, 10)
+                        pygameDraw.circle(self.surface, "red", ((self.position[0] * self.cellSize[0]) + self.cellSize[0]/2, (self.position[1] * self.cellSize[1])+ self.cellSize[1]/2), 5)
 
 
 class arrow(towerBase):
@@ -132,36 +121,8 @@ class arrow(towerBase):
                 # Small Black Square vector drawing
                 pygameDraw.rect(self.surface, (55,55,55), (
                         self.drawX + (self.cellSize[0]/3), self.drawY + (self.cellSize[1]/3),
-                        self.cellSize[0]/3, self.cellSize[0]/3
+                        self.cellSize[0]/3, self.cellSize[1]/3
                         ))
 
 
-class enemy:
-
-        def __init__(self, surface, x=0, y=0, position=[], health=10, damage=5, speed=5, cellSize=[10,10]):
-                self.surface = surface
-                self.cellSize = cellSize
-                self.health = health
-                self.damage = damage
-                self.speed = speed
-                if len(position) != 2:
-                        self.position = (x, y)
-                else:
-                        self.position = tuple(position)
-
-                # Randomly chosen colour for enemy
-                self.colour = (
-                        randint(10, 255),
-                        randint(10, 255),
-                        randint(10, 255)
-                )
-
-
-
-        def sim(self):
-                # Drawing of enemy
-                pygameDraw.circle(self.surface, self.colour, self.position, 5)
-
-                # Movement of enemy
-                self.position = ((self.position[0] + self.speed) % self.surface.get_width(), self.position[1])
 

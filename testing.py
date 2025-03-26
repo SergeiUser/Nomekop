@@ -1,8 +1,10 @@
 import towers
+import enemies as ENEMIES
+import objects
 import pygame, random
 
-windowDimensions = (1080, 605)
-gridSize = (16, 9)
+windowDimensions = (1260, 810)
+gridSize = (14, 9)
 
 cellSize = [windowDimensions[x]/gridSize[x] for x in range(len(gridSize))]
 print(cellSize)
@@ -19,23 +21,23 @@ for x in range(len(towersInScene)):
         print(f"Tower {x} is: {type(towersInScene[x])}")
 
 # Generator for enemies
-enemies = [towers.enemy(
+enemies = [ENEMIES.enemy(
         window,
         x = windowDimensions[0] * random.random(),
         y = (windowDimensions[1]/3) * random.random() + windowDimensions[1]/3,
         cellSize=cellSize,
-        speed = random.uniform(3,6)
-        ) for x in range(6)]
+        speed = random.uniform(2,2)
+        ) for x in range(1)]
 
 
-cursor = towers.cursor(0,0)
+cursor = objects.cursor(0,0)
 #enemies.append(cursor) # Makes cursor targettable by towers
 
 run = True
 while run:
         cursor.position = pygame.mouse.get_pos()
         window.fill("darkblue")
-        pygame.time.delay(5)
+        pygame.time.delay(1)
 
         for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -57,12 +59,12 @@ while run:
                                         else:
                                                 x += 1
                 if pygame.key.get_pressed()[pygame.K_SPACE]:
-                        enemies.append(towers.enemy(
+                        enemies.append(ENEMIES.enemy(
                                         window,
                                         x = windowDimensions[0] * random.random(),
                                         y = (windowDimensions[1]/3) * random.random() + windowDimensions[1]/3,
                                         cellSize=cellSize,
-                                        speed = random.uniform(3,6)
+                                        speed = random.uniform(2,2)
                         ))
 
         for tower in towersInScene: #Draws cooldown circle for each tower
