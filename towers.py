@@ -90,7 +90,7 @@ class towerBase:
                         self.drawLine = True
                         self.cooldownCounter -= self.cooldownSpeed
 
-                elif self.cooldownCounter < 0 and dist(targetPos, position) < self.range * ((self.cellSize[0]+self.cellSize[1])/2) and self.drawLine: # If off cooldown then attack & Reset cooldownCounter
+                if self.cooldownCounter < 0 and dist(targetPos, position) < self.range * ((self.cellSize[0]+self.cellSize[1])/2) and self.drawLine: # If off cooldown then attack & Reset cooldownCounter
                         self.cooldownCounter = self.cooldown
                         target.health -= self.damage
 

@@ -1,20 +1,20 @@
 import pygame
 import objects
+import random
 
 pygame.init()
-window = pygame.display.set_mode((1260, 810))
+display = pygame.display.set_mode((1280, 640))
 
 
 
 def draw_game():
-    global window
     for row in range(len(objects.tilemap)):
-
         for column in range(len(objects.tilemap[row])):
+            image = objects.textures[objects.tilemap[row][column]]
+            destination = (column*objects.tilesize, row*objects.tilesize)
 
-            x = objects.textures[objects.tilemap[row][column]]
-            y = (column*objects.tilesize, row*objects.tilesize)
-            window.blit(x, y)
+            image = pygame.transform.scale(image, (64,64))
+            display.blit(image, destination)
 
 
 

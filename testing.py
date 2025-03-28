@@ -14,6 +14,9 @@ window = pygame.display.set_mode(windowDimensions)
 
 towersInScene = []
 
+money = 0
+health = 100
+
 # Makes randomly placed towers
 #towersInScene = [towers.arrow(window,position=[random.randint(0,gridSize[0]-1), random.randint(2,gridSize[1]-2)],cellSize=cellSize)for x in range(6)]
 
@@ -26,8 +29,8 @@ enemies = [ENEMIES.enemy(
         x = windowDimensions[0] * random.random(),
         y = (windowDimensions[1]/3) * random.random() + windowDimensions[1]/3,
         cellSize=cellSize,
-        speed = random.uniform(2,2)
-        ) for x in range(1)]
+        speed = random.randint(2,2)
+        ) for x in range(0, 10)]
 
 
 cursor = objects.cursor(0,0)
@@ -37,7 +40,7 @@ run = True
 while run:
         cursor.position = pygame.mouse.get_pos()
         window.fill("darkblue")
-        pygame.time.delay(1)
+        pygame.time.delay(5)
 
         for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -64,7 +67,7 @@ while run:
                                         x = windowDimensions[0] * random.random(),
                                         y = (windowDimensions[1]/3) * random.random() + windowDimensions[1]/3,
                                         cellSize=cellSize,
-                                        speed = random.uniform(2,2)
+                                        speed = random.randint(2,5)
                         ))
 
         for tower in towersInScene: #Draws cooldown circle for each tower
@@ -82,9 +85,18 @@ while run:
         for enemy in enemies: #Enemy Logic
                 enemy.sim() # Draws enemy to screen & Moves enemy to right at it's speed
 
-                if enemy.health <= 0: # Deletes enemies if health is equal to or below zero
+                if enemy.state != "alive":
+                        if enemy.state == "killed":
+                                money += enemy.reward
+                        else:
+                                health -= enemy.damage
                         del enemies[x]
                 else:
                         x += 1
 
         pygame.display.update()
+print(f"Enemy Count: {len(enemies)}")
+x = 0
+for enemy in enemies:
+        x += 1
+        print(f"Enemy {x} Pos: {tuple(enemy.position)}\nSpeed: {enemy.speed}")
