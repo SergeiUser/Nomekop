@@ -1,4 +1,8 @@
-# Class for cuRHor
+from pygame import image as pygameImage
+from pygame import surface as pygameSurface
+from pygame import transform
+
+# Class for cursor
 class cursor:
         health = 100
         def __init__(self, x,y):
@@ -12,16 +16,15 @@ class cursor:
         def sim(self): #obselete, only used for targetting by toweRH
                 print(f"Health: {self.health}")
 
-import pygame
-'''
+
 N = 0
 G = 1
 Grasses = [
-        pygame.image.load("Nomekop/Assets/Grass And Road Tiles/Tiles/Grass0 - 0.png"),
-        pygame.image.load("Nomekop/Assets/Grass And Road Tiles/Tiles/Grass0 - 1.png"),
-        pygame.image.load("Nomekop/Assets/Grass And Road Tiles/Tiles/Grass0 - 2.png"),
-        pygame.image.load("Nomekop/Assets/Grass And Road Tiles/Tiles/Grass0 - 3.png"),
-        pygame.image.load("Nomekop/Assets/Grass And Road Tiles/Tiles/Grass0 - 4.png"),
+        pygameImage.load("Nomekop/Assets/Tiles/Grass0 - 0.png"),
+        pygameImage.load("Nomekop/Assets/Tiles/Grass0 - 1.png"),
+        pygameImage.load("Nomekop/Assets/Tiles/Grass0 - 2.png"),
+        pygameImage.load("Nomekop/Assets/Tiles/Grass0 - 3.png"),
+        pygameImage.load("Nomekop/Assets/Tiles/Grass0 - 4.png"),
 ]
 W = 2
 RH = 3
@@ -31,16 +34,16 @@ RC = 5
 
 
 textures = {
-        N  : [pygame.surface.Surface((32,32))],
-        G  : Grasses,
-        W  : [pygame.image.load("Nomekop/Assets/Grass And Road Tiles/Tiles/Water1.png")],
-        RH : [pygame.image.load("Nomekop/Assets/Grass And Road Tiles/Tiles/Road3 - 0.png")],
-        RV : [pygame.image.load("Nomekop/Assets/Grass And Road Tiles/Tiles/Road1 - 1.png")],
-        RC : [pygame.image.load("Nomekop/Assets/Grass And Road Tiles/Tiles/Road4.png")],
+        N  : pygameSurface.Surface((32,32)),
+        G  : Grasses[0],
+        W  : pygameImage.load("Nomekop/Assets/Tiles/Water1.png"),
+        RH : pygameImage.load("Nomekop/Assets/Tiles/Road3 - 0.png"),
+        RV : pygameImage.load("Nomekop/Assets/Tiles/Road1 - 1.png"),
+        RC : pygameImage.load("Nomekop/Assets/Tiles/Road4.png"),
 
 }
 
-''''''[G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G],#20
+''' [G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G],#20
     [G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G],#19
     [G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G],#18
     [G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G],#17
@@ -50,7 +53,7 @@ textures = {
     [G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G],#13
     [G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G],#12
     [G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, W],#11'''
-'''
+
 tilemap = [
     [G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G],#10
     [G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G],#9
@@ -70,4 +73,12 @@ tilesize = 64
 mapwidth = 4
 mapheight = 4
 
-'''
+
+def drawBackground(display, cellSizes):
+        for row in range(len(tilemap)):
+                for column in range(len(tilemap[row])):
+                        image = textures[tilemap[row][column]]
+                        destination = (column*tilesize, row*tilesize)
+
+                        image = transform.scale(image, (cellSizes[0],cellSizes[1]))
+                        display.blit(image, destination)

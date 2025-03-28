@@ -3,8 +3,10 @@ import enemies as ENEMIES
 import objects
 import pygame, random
 
-windowDimensions = (1260, 810)
-gridSize = (14, 9)
+
+
+windowDimensions = (1440, 810)
+gridSize = (16, 9)
 
 cellSize = [windowDimensions[x]/gridSize[x] for x in range(len(gridSize))]
 print(cellSize)
@@ -39,8 +41,9 @@ cursor = objects.cursor(0,0)
 run = True
 while run:
         cursor.position = pygame.mouse.get_pos()
-        window.fill("darkblue")
         pygame.time.delay(5)
+        objects.drawBackground(window, (64,64)) 
+        #window.fill((30, 30, 120))
 
         for event in pygame.event.get():
                 if event.type == pygame.QUIT:

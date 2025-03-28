@@ -25,5 +25,5 @@ while run:
                 if event.type == pygame.QUIT:
                         run = False
 
-        draw_game()
+        objects.drawBackground(display)
         pygame.display.update()
