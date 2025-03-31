@@ -1,0 +1,81 @@
+from pygame import image as pygameImage
+from pygame import surface as pygameSurface
+from pygame import transform
+from random import choices, seed
+Grasses = [
+        pygameImage.load("Nomekop/Assets/Tiles/Grass0 - 0.png"),
+        pygameImage.load("Nomekop/Assets/Tiles/Grass0 - 1.png"),
+        pygameImage.load("Nomekop/Assets/Tiles/Grass0 - 2.png"),
+        pygameImage.load("Nomekop/Assets/Tiles/Grass0 - 3.png"),
+        pygameImage.load("Nomekop/Assets/Tiles/Grass0 - 4.png"),
+]
+RoadsH = [
+        pygameImage.load("Nomekop/Assets/Tiles/Road3 - 0.png"),
+        pygameImage.load("Nomekop/Assets/Tiles/Road3 - 1.png"),
+]
+RoadsV = [
+        pygameImage.load("Nomekop/Assets/Tiles/Road1 - 0.png"),
+        pygameImage.load("Nomekop/Assets/Tiles/Road1 - 1.png"),
+]
+N = 0
+G = 1
+W = 2
+RH = 3
+RV = 4
+RC = 5
+
+textures = {
+        N  : ([pygameSurface.Surface((32,32))],[0]),
+        G  : (Grasses, [5,1,3,3,3]),
+        W  : ([pygameImage.load("Nomekop/Assets/Tiles/Water1.png")], [1]),
+        RH : (RoadsH, [1,1]),
+        RV : (RoadsV, [1,1]),
+        RC : ([pygameImage.load("Nomekop/Assets/Tiles/Road4.png")], [1]),
+}
+
+''' [G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G],#20
+    [G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G],#19
+    [G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G],#18
+    [G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G],#17
+    [G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G],#16
+    [RH,G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G],#15
+    [G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G],#14
+    [G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G],#13
+    [G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G],#12
+    [G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, W],#11'''
+
+tilemap = [
+    [G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G],#10
+    [G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G],#9
+    [G, G, G, G, G, G, G, G, G, RV,G, G, G, G, G, G, G, G, G, G],#8
+    [G, G, G, G, G, G, G, G, G, RV,G, G, G, G, G, G, G, G, G, G],#7
+    [G, G, G, G, G, G, G, G, G, RV,G, G, G, G, G, G, G, G, G, G],#6
+    [RH,RH,RH,RH,RH,RH,RH,RH,RH,RC,G, G, G, G, G, G, G, G, G, G],#5
+    [G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G],#4
+    [G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G],#3
+    [G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G],#2
+    [G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, W],#1
+]
+
+
+
+tilesize = 64
+mapwidth = 4
+mapheight = 4
+
+
+def drawBackground(display, cellSizes, gameSeed):
+        seed(gameSeed)
+        for row in range(len(tilemap)):
+                for column in range(len(tilemap[row])):
+                        texture = textures[tilemap[row][column]]
+                        print(type(texture))
+                        if str(type(texture)) == "<class 'tuple'>":
+                                image = choices(texture[0], texture[1])[0]
+                        else:
+                                image = texture
+
+                        destination = (column*cellSizes[0], row*cellSizes[0])
+
+                        image = transform.scale(image, (cellSizes[0],cellSizes[1]))
+                        display.blit(image, destination)

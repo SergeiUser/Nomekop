@@ -1,18 +1,25 @@
-import towers
+import towers, enemies, objects, tilemap
 import pygame, random
 
 gravity = -2
 
-windowDimensions = (1080, 605)
-gridSize = (16, 9)
+
+
+windowDimensions = (1260, 630)
+gridSize = (20, 10)
 
 cellSize = [windowDimensions[x]/gridSize[x] for x in range(len(gridSize))]
+tilemapCellSize = tuple(cellSize)
 print(cellSize)
 pygame.init()
 
 window = pygame.display.set_mode(windowDimensions)
+seed = random.randint(100000, 999999)
 
 towersInScene = []
+
+money = 0
+health = 100
 
 # Makes randomly placed towers
 #towersInScene = [towers.arrow(window,position=[random.randint(0,gridSize[0]-1), random.randint(2,gridSize[1]-2)],cellSize=cellSize)for x in range(6)]
@@ -22,23 +29,24 @@ for x in range(len(towersInScene)):
 
 
 # Generator for enemies
-enemies = [towers.enemy(
+enemiesInScene = [enemies.enemy(
         window,
         x = windowDimensions[0] * random.random(),
         y = (windowDimensions[1]/3) * random.random() + windowDimensions[1]/3,
         cellSize=cellSize,
-        speed = random.uniform(3,6)
-        ) for x in range(6)]
+        speed = random.randint(2,2)
+        ) for x in range(0, 10)]
 
 
-cursor = towers.cursor(0,0)
+cursor = objects.cursor(0,0)
 #enemies.append(cursor) # Makes cursor targettable by towers
 
 run = True
 while run:
         cursor.position = pygame.mouse.get_pos()
-        window.fill("darkblue")
         pygame.time.delay(5)
+        tilemap.drawBackground(window, tilemapCellSize, seed) 
+        #window.fill((30, 30, 120))
 
         for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -60,12 +68,14 @@ while run:
                                         else:
                                                 x += 1
                 if pygame.key.get_pressed()[pygame.K_SPACE]:
-                        enemies.append(towers.enemy(
+                        enemiesInScene.append(enemies
+                
+        .enemy(
                                         window,
                                         x = windowDimensions[0] * random.random(),
                                         y = (windowDimensions[1]/3) * random.random() + windowDimensions[1]/3,
                                         cellSize=cellSize,
-                                        speed = random.uniform(3,6)
+                                        speed = random.randint(2,5)
                         ))
 
         for tower in towersInScene: #Draws cooldown circle for each tower
@@ -77,17 +87,24 @@ while run:
         for tower in towersInScene: # Draws each tower
                 tower.draw()
         for tower in towersInScene: # Attacking logic for tower
-                tower.findClosestTarget(enemies)
+                tower.findClosestTarget(enemiesInScene)
 
         x = 0
-        for enemy in enemies: #Enemy Logic
+        for enemy in enemiesInScene: #Enemy Logic
                 enemy.sim() # Draws enemy to screen & Moves enemy to right at it's speed
-                enemy.physics(gravity)
 
-                if enemy.health <= 0: # Deletes enemies if health is equal to or below zero
-                        pass
-                        #del enemies[x]
+                if enemy.state != "alive":
+                        if enemy.state == "killed":
+                                money += enemy.reward
+                        else:
+                                health -= enemy.damage
+                        del enemiesInScene[x]
                 else:
                         x += 1
 
         pygame.display.update()
+print(f"Enemy Count: {len(enemiesInScene)}")
+x = 0
+for enemy in enemiesInScene:
+        x += 1
+        print(f"Enemy {x} Pos: {tuple(enemy.position)}\nSpeed: {enemy.speed}")
