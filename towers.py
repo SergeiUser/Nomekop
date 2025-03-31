@@ -137,7 +137,7 @@ class arrow(towerBase):
 
 
 class enemy:
-
+        velocity = [0,0]
         def __init__(self, surface, x=0, y=0, position=[], health=10, damage=5, speed=5, cellSize=[10,10]):
                 self.surface = surface
                 self.cellSize = cellSize
@@ -145,9 +145,9 @@ class enemy:
                 self.damage = damage
                 self.speed = speed
                 if len(position) != 2:
-                        self.position = (x, y)
+                        self.position = [x,y]
                 else:
-                        self.position = tuple(position)
+                        self.position = position
 
                 # Randomly chosen colour for enemy
                 self.colour = (
@@ -156,12 +156,21 @@ class enemy:
                         randint(10, 255)
                 )
 
+        def physics(self, gravity):
+                if self.position[1] > 605 + 5:
+                        self.position[1] = 605
+                        self.velocity[1] = -2
+                else:
+                        self.velocity[1] -= (gravity *0.01)
+                        self.position[1] += self.velocity[1]
 
+                self.position[0] = (self.position[0] + self.speed) % self.surface.get_width()
 
         def sim(self):
                 # Drawing of enemy
-                pygameDraw.circle(self.surface, self.colour, self.position, 5)
+                pygameDraw.circle(self.surface, self.colour, tuple(self.position), 5)
 
                 # Movement of enemy
-                self.position = ((self.position[0] + self.speed) % self.surface.get_width(), self.position[1])
+                #self.position = ((self.position[0] + self.speed) % self.surface.get_width(), self.position[1])
 
+                #self.position = list(self.position)

@@ -1,6 +1,8 @@
 import towers
 import pygame, random
 
+gravity = -2
+
 windowDimensions = (1080, 605)
 gridSize = (16, 9)
 
@@ -17,6 +19,7 @@ towersInScene = []
 
 for x in range(len(towersInScene)):
         print(f"Tower {x} is: {type(towersInScene[x])}")
+
 
 # Generator for enemies
 enemies = [towers.enemy(
@@ -79,9 +82,11 @@ while run:
         x = 0
         for enemy in enemies: #Enemy Logic
                 enemy.sim() # Draws enemy to screen & Moves enemy to right at it's speed
+                enemy.physics(gravity)
 
                 if enemy.health <= 0: # Deletes enemies if health is equal to or below zero
-                        del enemies[x]
+                        pass
+                        #del enemies[x]
                 else:
                         x += 1
 
