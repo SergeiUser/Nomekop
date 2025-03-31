@@ -1,18 +1,18 @@
-import towers
-import enemies as ENEMIES
-import objects
+import towers, enemies, objects, tilemap
 import pygame, random
 
 
 
-windowDimensions = (1440, 810)
-gridSize = (16, 9)
+windowDimensions = (1260, 630)
+gridSize = (20, 10)
 
 cellSize = [windowDimensions[x]/gridSize[x] for x in range(len(gridSize))]
+tilemapCellSize = tuple(cellSize)
 print(cellSize)
 pygame.init()
 
 window = pygame.display.set_mode(windowDimensions)
+seed = random.randint(100000, 999999)
 
 towersInScene = []
 
@@ -26,7 +26,7 @@ for x in range(len(towersInScene)):
         print(f"Tower {x} is: {type(towersInScene[x])}")
 
 # Generator for enemies
-enemies = [ENEMIES.enemy(
+enemiesInScene = [enemies.enemy(
         window,
         x = windowDimensions[0] * random.random(),
         y = (windowDimensions[1]/3) * random.random() + windowDimensions[1]/3,
@@ -42,7 +42,7 @@ run = True
 while run:
         cursor.position = pygame.mouse.get_pos()
         pygame.time.delay(5)
-        objects.drawBackground(window, (64,64)) 
+        tilemap.drawBackground(window, tilemapCellSize, seed) 
         #window.fill((30, 30, 120))
 
         for event in pygame.event.get():
@@ -65,7 +65,9 @@ while run:
                                         else:
                                                 x += 1
                 if pygame.key.get_pressed()[pygame.K_SPACE]:
-                        enemies.append(ENEMIES.enemy(
+                        enemiesInScene.append(enemies
+                
+        .enemy(
                                         window,
                                         x = windowDimensions[0] * random.random(),
                                         y = (windowDimensions[1]/3) * random.random() + windowDimensions[1]/3,
@@ -82,10 +84,10 @@ while run:
         for tower in towersInScene: # Draws each tower
                 tower.draw()
         for tower in towersInScene: # Attacking logic for tower
-                tower.findClosestTarget(enemies)
+                tower.findClosestTarget(enemiesInScene)
 
         x = 0
-        for enemy in enemies: #Enemy Logic
+        for enemy in enemiesInScene: #Enemy Logic
                 enemy.sim() # Draws enemy to screen & Moves enemy to right at it's speed
 
                 if enemy.state != "alive":
@@ -93,13 +95,13 @@ while run:
                                 money += enemy.reward
                         else:
                                 health -= enemy.damage
-                        del enemies[x]
+                        del enemiesInScene[x]
                 else:
                         x += 1
 
         pygame.display.update()
-print(f"Enemy Count: {len(enemies)}")
+print(f"Enemy Count: {len(enemiesInScene)}")
 x = 0
-for enemy in enemies:
+for enemy in enemiesInScene:
         x += 1
         print(f"Enemy {x} Pos: {tuple(enemy.position)}\nSpeed: {enemy.speed}")

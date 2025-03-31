@@ -1,5 +1,5 @@
 import pygame
-import objects
+import tilemap
 import random
 
 pygame.init()
@@ -8,10 +8,10 @@ display = pygame.display.set_mode((1280, 640))
 
 
 def draw_game():
-    for row in range(len(objects.tilemap)):
-        for column in range(len(objects.tilemap[row])):
-            image = objects.textures[objects.tilemap[row][column]]
-            destination = (column*objects.tilesize, row*objects.tilesize)
+    for row in range(len(tilemap.tilemap)):
+        for column in range(len(tilemap.tilemap[row])):
+            image = tilemap.textures[tilemap.tilemap[row][column]]
+            destination = (column*tilemap.tilesize, row*tilemap.tilesize)
 
             image = pygame.transform.scale(image, (64,64))
             display.blit(image, destination)
@@ -25,5 +25,5 @@ while run:
                 if event.type == pygame.QUIT:
                         run = False
 
-        objects.drawBackground(display)
+        tilemap.drawBackground(display)
         pygame.display.update()

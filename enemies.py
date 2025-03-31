@@ -1,6 +1,7 @@
 from random import randint
 from pygame import draw as pygameDraw
 from math import dist
+#import paths
 class enemy:
         path = [
                 ((0,   300), 1),
