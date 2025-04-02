@@ -6,7 +6,7 @@ gravity = -2
 
 
 windowDimensions = (1600, 800)
-gridSize = (40, 20)
+gridSize = (20, 10)
 
 cellSize = [windowDimensions[x]/gridSize[x] for x in range(len(gridSize))]
 tilemapCellSize = tuple(cellSize)

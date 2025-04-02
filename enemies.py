@@ -14,8 +14,16 @@ class enemy:
                 self.damage = damage
                 self.speed = speed
                 self.reward = reward
+                self.level = 0
 
                 self.path = choice(paths[const.map])
+
+
+
+                x = 1 + (self.level * 0.25)
+                print(x)
+                self.size = 5 * x
+                print(self.size)
 
                 if len(position) != 2:
                         self.position = [
@@ -37,7 +45,7 @@ class enemy:
 
         def sim(self):
                 # Drawing of enemy
-                pygameDraw.circle(self.surface, self.colour, tuple(self.position), 5)
+                pygameDraw.circle(self.surface, self.colour, tuple(self.position), self.size)
 
                 # Movement of enemy
                 #self.position[0] = (self.position[0] + self.speed) % self.surface.get_width()
@@ -99,12 +107,17 @@ class enemy:
 
 class sergei(enemy):
         def init(self):
+                self.level = 3
                 self.speed *= 2
                 self.colour = (
                         randint(150, 255),
                         randint(0, 55),
                         randint(0, 55)
                 )
+                x = 1 + (self.level * 0.25)
+                print(x)
+                self.size = 5 * x
+                print(self.size)
 
         def explode(self):
                 if self.health < 0:
