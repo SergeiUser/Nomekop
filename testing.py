@@ -5,8 +5,8 @@ gravity = -2
 
 
 
-windowDimensions = (1260, 630)
-gridSize = (20, 10)
+windowDimensions = (1600, 800)
+gridSize = (40, 20)
 
 cellSize = [windowDimensions[x]/gridSize[x] for x in range(len(gridSize))]
 tilemapCellSize = tuple(cellSize)
@@ -27,15 +27,18 @@ health = 100
 for x in range(len(towersInScene)):
         print(f"Tower {x} is: {type(towersInScene[x])}")
 
-
+enemyTypes = [enemies.enemy,enemies.sergei]
 # Generator for enemies
-enemiesInScene = [enemies.enemy(
+enemiesInScene = [random.choice(enemyTypes)(
         window,
         x = windowDimensions[0] * random.random(),
         y = (windowDimensions[1]/3) * random.random() + windowDimensions[1]/3,
         cellSize=cellSize,
-        speed = random.uniform(1,4)
+        speed = random.uniform(1,2)
         ) for x in range(0, 10)]
+
+for enemy in enemiesInScene:
+        enemy.init()
 
 #shop = objects.shop()
 cursor = objects.cursor(0,0)
@@ -53,6 +56,7 @@ while run:
                         run = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
                         #Cell that the mouse is in
+                        print(money)
                         mouseCell = (
                                 cursor.position[0] // cellSize[0],
                                 cursor.position[1] // cellSize[1]

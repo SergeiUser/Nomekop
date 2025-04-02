@@ -1,7 +1,7 @@
 import pygame, random
 import tilemap, enemies, objects, towers
 
-windowDimensions = (1260, 630)
+windowDimensions = (1840, 920)
 gridSize = (20, 10)
 
 cellSize = [windowDimensions[x]/gridSize[x] for x in range(len(gridSize))]

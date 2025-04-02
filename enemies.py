@@ -17,9 +17,6 @@ class enemy:
 
                 self.path = choice(paths[const.map])
 
-
-
-
                 if len(position) != 2:
                         self.position = [
                                 (self.path[0][0][0] * self.cellSize[0]),
@@ -34,7 +31,8 @@ class enemy:
                         randint(150, 255),
                         randint(150, 255)
                 )
-
+        def init(self):
+                self.speed = self.speed
 
 
         def sim(self):
@@ -97,3 +95,17 @@ class enemy:
                 if self.pathStage == 4:
                         self.health = -10
                 '''
+
+
+class sergei(enemy):
+        def init(self):
+                self.speed *= 2
+                self.colour = (
+                        randint(150, 255),
+                        randint(0, 55),
+                        randint(0, 55)
+                )
+
+        def explode(self):
+                if self.health < 0:
+                        print("bang")
