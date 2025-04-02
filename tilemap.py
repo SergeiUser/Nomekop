@@ -17,20 +17,28 @@ RoadsV = [
         pygameImage.load("Nomekop/Assets/Tiles/Road1 - 0.png"),
         pygameImage.load("Nomekop/Assets/Tiles/Road1 - 1.png"),
 ]
+RoadsTurns = [
+        pygameImage.load("Nomekop/Assets/Tiles/Road2 - 0.png"),
+        pygameImage.load("Nomekop/Assets/Tiles/Road2 - 1.png"),
+        pygameImage.load("Nomekop/Assets/Tiles/Road2 - 2.png"),
+        pygameImage.load("Nomekop/Assets/Tiles/Road2 - 3.png"),
+]
 N = 0
 G = 1
 W = 2
 RH = 3
 RV = 4
 RC = 5
+RT = 6
 
 textures = {
-        N  : ([pygameSurface.Surface((32,32))],[0]),
+        N  : pygameImage.load("Nomekop/Assets/Tiles/Road0.png"),
         G  : (Grasses, [5,1,3,3,3]),
         W  : ([pygameImage.load("Nomekop/Assets/Tiles/Water1.png")], [1]),
         RH : (RoadsH, [1,1]),
         RV : (RoadsV, [1,1]),
         RC : ([pygameImage.load("Nomekop/Assets/Tiles/Road4.png")], [1]),
+        RT : RoadsTurns
 }
 
 ''' [G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G],#20
@@ -45,16 +53,16 @@ textures = {
     [G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, W],#11'''
 
 tilemap = [
-    [G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G],#10
-    [G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G],#9
-    [G, G, G, G, G, G, G, G, G, RV,G, G, G, G, G, G, G, G, G, G],#8
-    [G, G, G, G, G, G, G, G, G, RV,G, G, G, G, G, G, G, G, G, G],#7
-    [G, G, G, G, G, G, G, G, G, RV,G, G, G, G, G, G, G, G, G, G],#6
-    [RH,RH,RH,RH,RH,RH,RH,RH,RH,RC,G, G, G, G, G, G, G, G, G, G],#5
-    [G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G],#4
-    [G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G],#3
-    [G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G],#2
-    [G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, G, W],#1
+    [G,     G, G, G, G,    G, G, G, G, G,     G, G, G, RV,    G, G,     G,N,N,N],#0
+    [(RT,2),G, G, G,(RT,1),RH,RH,RH,RH,(RT,2),G, G, G, RV,    G, G,     G,N,N,N],#1
+    [RV,    G, G, G, RV,   G, G, G, G, RV,    G, G, G, RV,    G, G,     G,N,N,N],#2
+    [RV,    G, G, G, RV,   G, G, G, G, RV,    G, G, G, RV,    G, G,     G,N,N,N],#3
+    [RV,    G, G, G, RV,   G, G, G, G, RV,    G, G, G, RV,    G, G,     G,N,N,N],#4
+    [(RT,0),RH,RH,RH,RC,   RH,RH,RH,RH,(RT,3),G, G, G, RV,    G, G,     G,N,N,N],#5
+    [G,     G, G, G, RV,   G, G, G, G, G,     G, G, G, RV,    G, G,     G,N,N,N],#6
+    [G,     G, G, G,(RT,0),RH,RH,RH,RH,RH,    RH,RH,RH,RC,    RH,(RT,2),G,N,N,N],#7
+    [G,     G, G, G, G,    G, G, G, G, G,     G, G, G, RV,    G,  RV,   G,N,N,N],#8
+    [G,     G, G, G, G,    G, G, G, G, G,     G, G, G,(RT,0), RH,(RT,3),G,N,N,N],#9
 ]
 
 
@@ -68,8 +76,11 @@ def drawBackground(display, cellSizes, gameSeed):
         seed(gameSeed)
         for row in range(len(tilemap)):
                 for column in range(len(tilemap[row])):
-                        texture = textures[tilemap[row][column]]
-                        print(type(texture))
+                        if str(type(tilemap[row][column])) == "<class 'tuple'>":
+                                textureTuple = tilemap[row][column]
+                                texture = textures[textureTuple[0]][textureTuple[1]]
+                        else:
+                                texture = textures[tilemap[row][column]]
                         if str(type(texture)) == "<class 'tuple'>":
                                 image = choices(texture[0], texture[1])[0]
                         else:

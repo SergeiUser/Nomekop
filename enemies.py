@@ -1,17 +1,10 @@
-from random import randint
+from random import randint, choice
 from pygame import draw as pygameDraw
 from math import dist
-#import paths
+from paths import paths
+import constants as const
 class enemy:
-        path = [
-                ((0,   300), 1),
-                ((450, 450), 1),
-                ((750, 450), 1),
-                ((750, 150), 1),
-                ((600, 100), 1),
-                ((1000,300), 1)
 
-        ]
         pathStage = 0
         state = "alive"
         def __init__(self, surface, x=0, y=0, position=[], health=10, damage=1, speed=1, cellSize=[10,10], reward = 10):
@@ -21,16 +14,25 @@ class enemy:
                 self.damage = damage
                 self.speed = speed
                 self.reward = reward
+
+                self.path = choice(paths[const.map])
+
+
+
+
                 if len(position) != 2:
-                        self.position = [x,y]
+                        self.position = [
+                                (self.path[0][0][0] * self.cellSize[0]),
+                                (self.path[0][0][1] * self.cellSize[1]) + self.cellSize[1]/2,
+                        ]
                 else:
                         self.position = list(position)
 
                 # Randomly chosen colour for enemy
                 self.colour = (
-                        randint(50, 255),
-                        randint(50, 255),
-                        randint(50, 255)
+                        randint(0, 55),
+                        randint(150, 255),
+                        randint(150, 255)
                 )
 
 
@@ -52,7 +54,10 @@ class enemy:
                         return
 
                 pathingNode = self.path[self.pathStage]
-                pos = pathingNode[0]
+                pos = list(pathingNode[0])
+                for i in range(len(self.cellSize)):
+                        pos[i] = pos[i] * self.cellSize[i]
+                        pos[i] = pos[i] + self.cellSize[i]/2
                 speedModifier = pathingNode[1]
 
 

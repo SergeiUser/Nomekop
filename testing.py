@@ -34,18 +34,18 @@ enemiesInScene = [enemies.enemy(
         x = windowDimensions[0] * random.random(),
         y = (windowDimensions[1]/3) * random.random() + windowDimensions[1]/3,
         cellSize=cellSize,
-        speed = random.randint(2,2)
+        speed = random.uniform(1,4)
         ) for x in range(0, 10)]
 
-
+#shop = objects.shop()
 cursor = objects.cursor(0,0)
 #enemies.append(cursor) # Makes cursor targettable by towers
 
 run = True
 while run:
         cursor.position = pygame.mouse.get_pos()
-        pygame.time.delay(5)
-        tilemap.drawBackground(window, tilemapCellSize, seed) 
+        pygame.time.delay(10)
+        tilemap.drawBackground(window, tilemapCellSize, seed)
         #window.fill((30, 30, 120))
 
         for event in pygame.event.get():
@@ -56,21 +56,21 @@ while run:
                         mouseCell = (
                                 cursor.position[0] // cellSize[0],
                                 cursor.position[1] // cellSize[1]
-                                )
-                        if pygame.mouse.get_pressed()[0]: # Creates tower on left click
-                                towersInScene.append(towers.arrow(window, position=mouseCell, cellSize=cellSize))
+                        )
+                        print(mouseCell)
+                        if tilemap.tilemap[int(mouseCell[1])][int(mouseCell[0])] == 1:
+                                if pygame.mouse.get_pressed()[0]: # Creates tower on left click
+                                        towersInScene.append(towers.arrow(window, position=mouseCell, cellSize=cellSize))
 
-                        elif pygame.mouse.get_pressed()[2]: # Deletes right clicked tower
-                                x = 0
-                                for tower in towersInScene: # Finds towers in the same cell as the mouse and deletes them
-                                        if tower.position == mouseCell:
-                                                del towersInScene[x]
-                                        else:
-                                                x += 1
+                                elif pygame.mouse.get_pressed()[2]: # Deletes right clicked tower
+                                        x = 0
+                                        for tower in towersInScene: # Finds towers in the same cell as the mouse and deletes them
+                                                if tower.position == mouseCell:
+                                                        del towersInScene[x]
+                                                else:
+                                                        x += 1
                 if pygame.key.get_pressed()[pygame.K_SPACE]:
-                        enemiesInScene.append(enemies
-                
-        .enemy(
+                        enemiesInScene.append(enemies.enemy(
                                         window,
                                         x = windowDimensions[0] * random.random(),
                                         y = (windowDimensions[1]/3) * random.random() + windowDimensions[1]/3,
