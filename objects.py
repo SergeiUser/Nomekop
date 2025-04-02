@@ -50,7 +50,7 @@ class shop:
         {
                 "item": "waterT",
                 "position":(12.32, 4),
-                "cost":100,
+                "cost":150,
                 "tower": towers.quickArrow
         },
         {
@@ -77,6 +77,7 @@ class shop:
                         self.cellsize = (self.cellSize[0]*1.5,self.cellSize[1]*1.5)
                         position = item["position"]
                         tower = item["tower"](self.display,cellSize=self.cellsize, position=position)
+                        tower.init()
                         tower.draw()
 
         def click(self, mousePos):

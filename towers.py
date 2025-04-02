@@ -5,15 +5,20 @@ from random import randint
 
 typeColour = {
         "base" : (90, 90, 90),
-        "arrow": (137, 81, 41),
-        "fire" : (232, 97 ,0),
+        "earth": (137, 81, 41),
+        "water" : (232, 97 ,0),
         "chain": (70, 130, 180)
 }
 
+typeCost = {
+        "earth": 100,
+        "water": 150,
+}
 
 
 # Base class for all towers
 class towerBase:
+        initialised = False
         range = 1.5
         cooldown = 200
         cooldownCounter = cooldown
@@ -32,7 +37,8 @@ class towerBase:
                 # Initial Conversion of cell co-ordinates to screen co-ordinates
                 self.drawX = self.position[0] * self.cellSize[0]
                 self.drawY = self.position[1] * self.cellSize[1]
-
+        def init(self):
+                pass
         def drawBase(self): #Defines drawing position on screen and draws base square
                 # Repeating conversion of cell co-ordinates to screen co-ordinates for tower movement
                 self.drawX = self.position[0] * self.cellSize[0]
@@ -107,8 +113,10 @@ class towerBase:
 
 
 class arrow(towerBase):
-        type = "arrow"
-        damage = 5
+
+        def init(self):
+                self.type = "earth"
+                self.damage = 5
 
         def subDraw(self):
                 pass
@@ -130,12 +138,15 @@ class arrow(towerBase):
                         ))
                 self.subDraw()
 class quickArrow(arrow):
-        cooldownSpeed = 8
-        damage = 2
+
+
+        def init(self):
+                self.type = "water"
+                self.cooldownSpeed = 8
+                self.damage = 2
 
         def subDraw(self):
-                pygameDraw.circle(self.surface, "blue", ((self.position[0] * self.cellSize[0]) + self.cellSize[0]/2, (self.position[1] * self.cellSize[1])+ self.cellSize[1]/2), 5)
-
+                pass
 
 class enemy:
         velocity = [0,0]

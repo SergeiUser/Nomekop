@@ -22,7 +22,7 @@ selectedTower ={
                 "tower": towers.arrow
         }
 
-money = 0
+money = 100
 health = 100
 
 # Makes randomly placed towers
@@ -74,14 +74,18 @@ while run:
                                                 if tower.position == mouseCell:
                                                         isTower = True
                                                         break
-                                        if not isTower:
+                                        if not isTower and money >= selectedTower["cost"]:
                                                 towersInScene.append(selectedTower["tower"](window, position=mouseCell, cellSize=cellSize))
+                                                money -= selectedTower["cost"]
 
                                 elif pygame.mouse.get_pressed()[2]: # Deletes right clicked tower
                                         x = 0
                                         for tower in towersInScene: # Finds towers in the same cell as the mouse and deletes them
                                                 if tower.position == mouseCell:
                                                         del towersInScene[x]
+                                                        money += towers.typeCost[tower.type] * 0.9
+                                                        print(money)
+                                                        break
                                                 else:
                                                         x += 1
                         else:
@@ -101,6 +105,8 @@ while run:
                 tower.drawCooldown(False)
                 # False: Fills whole circle at once as cooldownCounter decreases
                 # True : Fills circle in by quadrant as cooldownCounter decreases
+                if tower.initialised == False:
+                        tower.init()
 
 
         for tower in towersInScene: # Draws each tower
@@ -115,6 +121,7 @@ while run:
                 if enemy.state != "alive":
                         if enemy.state == "killed":
                                 money += enemy.reward
+                                print(money)
                         else:
                                 health -= enemy.damage
                         del enemiesInScene[x]
