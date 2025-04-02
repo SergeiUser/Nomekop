@@ -84,7 +84,7 @@ while run:
                         )  
 
         for tower in towersInScene: #Draws cooldown circle for each tower
-                tower.drawCooldown(True)
+                tower.drawCooldown(False)
                 # False: Fills whole circle at once as cooldownCounter decreases
                 # True : Fills circle in by quadrant as cooldownCounter decreases
 

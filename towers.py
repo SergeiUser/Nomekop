@@ -126,8 +126,8 @@ class arrow(towerBase):
                         self.cellSize[0]/3, self.cellSize[1]/3
                         ))
 class quickArrow(arrow):
-        cooldownSpeed = 20
-        damage = 1
+        cooldownSpeed = 8
+        damage = 2
 
 
 class enemy:
@@ -167,4 +167,4 @@ class enemy:
                 # Movement of enemy
                 #self.position = ((self.position[0] + self.speed) % self.surface.get_width(), self.position[1])
 
-                #self.position = list(self.position)
+                #self.position = list(self.position)        

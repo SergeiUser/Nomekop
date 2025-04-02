@@ -114,8 +114,8 @@ class enemy:
 
 class sergei(enemy):
         def init(self):
-                self.level = 3
-                self.speed *= 0.2
+                self.level = 5
+                self.speed *= 0.2 
                 self.colour = (
                         randint(150, 255),
                         randint(0, 55),
@@ -128,4 +128,6 @@ class sergei(enemy):
 
         def explode(self):
                 if self.health < 0:
+                        
                         print("bang")
+
