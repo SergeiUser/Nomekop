@@ -50,6 +50,8 @@ class towerBase:
                                 pygameDraw.circle(self.surface, "darkgreen", (self.drawX + self.cellSize[0]/2, self.drawY + self.cellSize[1]/2), int(self.cellSize[0]*towerCooldownPercentage), 0)
 
                 else: # Spiral Filling
+                        if towerCooldownPercentage > 0.99:
+                                towerCooldownPercentage == 1
                         if towerCooldownPercentage < 0.25:
                                 # Top Right Quadrant filling
                                 pygameDraw.circle(self.surface, "darkgreen", (self.drawX + self.cellSize[0]/2, self.drawY + self.cellSize[1]/2), int(self.cellSize[0]*towerCooldownPercentage*4), 0, True)
@@ -64,13 +66,13 @@ class towerBase:
                         else:
                                 # Top Left Quadrant filling
                                 pygameDraw.circle(self.surface, "darkgreen", (self.drawX + self.cellSize[0]/2, self.drawY + self.cellSize[1]/2), int(self.cellSize[0]), 0, True, False, True, True)
-                                pygameDraw.circle(self.surface, "darkgreen", (self.drawX + self.cellSize[0]/2, self.drawY + self.cellSize[1]/2), int(self.cellSize[0]*(towerCooldownPercentage-0.81)*4), 0, False, True)
+                                pygameDraw.circle(self.surface, "darkgreen", (self.drawX + self.cellSize[0]/2, self.drawY + self.cellSize[1]/2), int(self.cellSize[0]*(towerCooldownPercentage-0.81)*3.5), 0, False, True)
 
         def findClosestTarget(self, targets):
                 position = (self.drawX + self.cellSize[0]/2, self.drawY + self.cellSize[1]/2)
 
                 if self.cooldownCounter < -2: # Prevents cooldownCounter from going into the negatives & cooldown circle from growing exponentially
-                        self.cooldownCounter = -2
+                        self.cooldownCounter = 0
 
                 if len(targets) == 0: # Disables Tower attacking if no enemies
                         self.cooldownCounter -= self.cooldownSpeed
@@ -106,7 +108,7 @@ class towerBase:
 
 class arrow(towerBase):
         type = "arrow"
-        damage = 2
+        damage = 5
 
         def draw(self):
                 self.drawBase()
@@ -124,7 +126,8 @@ class arrow(towerBase):
                         self.cellSize[0]/3, self.cellSize[1]/3
                         ))
 class quickArrow(arrow):
-        cooldownSpeed = 10
+        cooldownSpeed = 20
+        damage = 1
 
 
 class enemy:

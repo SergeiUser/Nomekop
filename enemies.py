@@ -15,24 +15,26 @@ class enemy:
                 self.speed = speed
                 self.reward = reward
                 self.level = 0
-                self.offset = [
-                        uniform(-15,50),
-                        uniform(-15,50)
-                ]
-
                 self.path = choice(paths[const.map])
 
 
 
                 x = 1 + (self.level * 0.25)
                 print(x)
-                self.size = 5 * x
+                self.size = (self.cellSize[0]/11) * x
                 print(self.size)
+
+
+                self.offset = [
+                        uniform(3* -self.size,3* self.size),
+                        uniform(3* -self.size,3* self.size),
+                ]
+
 
                 if len(position) != 2:
                         self.position = [
-                                (self.path[0][0][0] * self.cellSize[0]),
-                                (self.path[0][0][1] * self.cellSize[1]) + self.cellSize[1]/2,
+                                (self.path[0][0][0] * self.cellSize[0]) + self.offset[0],
+                                (self.path[0][0][1] * self.cellSize[1]) + self.cellSize[1]/2 + self.offset[1],
                         ]
                 else:
                         self.position = list(position)
@@ -121,7 +123,7 @@ class sergei(enemy):
                 )
                 x = 1 + (self.level * 0.25)
                 print(x)
-                self.size = 5 * x
+                self.size = (self.cellSize[0]/11) * x
                 print(self.size)
 
         def explode(self):

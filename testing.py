@@ -35,7 +35,7 @@ enemiesInScene = [random.choice(enemyTypes)(
         y = (windowDimensions[1]/3) * random.random() + windowDimensions[1]/3,
         cellSize=cellSize,
         speed = random.uniform(1,2)
-        ) for x in range(50)]
+        ) for x in range(10)]
 
 for enemy in enemiesInScene:
         enemy.init()
