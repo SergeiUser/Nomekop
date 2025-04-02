@@ -40,7 +40,7 @@ class towerBase:
                 # Base square drawing
                 pygameDraw.rect(self.surface, typeColour[self.type], (self.drawX + 5, self.drawY + 5, self.cellSize[0] - 10, self.cellSize[1] - 10))
 
-        def drawCooldown(self, spiral=False): # Draws cooldown circle o>n the tower
+        def drawCooldown(self, spiral=True): # Draws cooldown circle o>n the tower
                 towerCooldownPercentage = ((self.cooldown - self.cooldownCounter)/self.cooldown)
                 pygameDraw.circle(self.surface, "darkgreen", (self.drawX + self.cellSize[0]/2, self.drawY + self.cellSize[1]/2), self.range * ((self.cellSize[0]+self.cellSize[0])/2), 2, False) # Outline circle to show range & limit of cooldown bar
                 pygameDraw.circle(self.surface, "darkgreen", (self.drawX + self.cellSize[0]/2, self.drawY + self.cellSize[1]/2), self.cellSize[0], 2, False) # Outline circle to show range & limit of cooldown bar
@@ -56,7 +56,7 @@ class towerBase:
                         elif towerCooldownPercentage < 0.5:
                                 # Bottom Right Quadrant filling
                                 pygameDraw.circle(self.surface, "darkgreen", (self.drawX + self.cellSize[0]/2, self.drawY + self.cellSize[1]/2), int(self.cellSize[0]), 0, True)
-                                pygameDraw.circle(self.surface, "darkgr>een", (self.drawX + self.cellSize[0]/2, self.drawY + self.cellSize[1]/2), int(self.cellSize[0]*(towerCooldownPercentage-0.25)*4), 0, False, False, False, True)
+                                pygameDraw.circle(self.surface, "darkgreen", (self.drawX + self.cellSize[0]/2, self.drawY + self.cellSize[1]/2), int(self.cellSize[0]*(towerCooldownPercentage-0.25)*4), 0, False, False, False, True)
                         elif towerCooldownPercentage < 0.75:
                                 # Bottom Left Quadrant filling
                                 pygameDraw.circle(self.surface, "darkgreen", (self.drawX + self.cellSize[0]/2, self.drawY + self.cellSize[1]/2), int(self.cellSize[0]), 0, True, False, False, True)
@@ -64,7 +64,7 @@ class towerBase:
                         else:
                                 # Top Left Quadrant filling
                                 pygameDraw.circle(self.surface, "darkgreen", (self.drawX + self.cellSize[0]/2, self.drawY + self.cellSize[1]/2), int(self.cellSize[0]), 0, True, False, True, True)
-                                pygameDraw.circle(self.surface, "darkgreen", (self.drawX + self.cellSize[0]/2, self.drawY + self.cellSize[1]/2), int(self.cellSize[0]*(towerCooldownPercentage-0.76)*4), 0, False, True)
+                                pygameDraw.circle(self.surface, "darkgreen", (self.drawX + self.cellSize[0]/2, self.drawY + self.cellSize[1]/2), int(self.cellSize[0]*(towerCooldownPercentage-0.81)*4), 0, False, True)
 
         def findClosestTarget(self, targets):
                 position = (self.drawX + self.cellSize[0]/2, self.drawY + self.cellSize[1]/2)
@@ -123,6 +123,8 @@ class arrow(towerBase):
                         self.drawX + (self.cellSize[0]/3), self.drawY + (self.cellSize[1]/3),
                         self.cellSize[0]/3, self.cellSize[1]/3
                         ))
+class quickArrow(arrow):
+        cooldownSpeed = 10
 
 
 class enemy:

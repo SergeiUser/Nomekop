@@ -61,7 +61,6 @@ mapheight = 4
 
 
 def drawBackground(display, cellSizes, gameSeed):
-        seed(gameSeed)
         for row in range(len(tilemap)):
                 for column in range(len(tilemap[row])):
                         if str(type(tilemap[row][column])) == "<class 'tuple'>":
@@ -70,7 +69,7 @@ def drawBackground(display, cellSizes, gameSeed):
                         else:
                                 texture = textures[tilemap[row][column]]
                         if str(type(texture)) == "<class 'tuple'>":
-                                image = choices(texture[0], texture[1])[0]
+                                image = texture[0][0]#choices(texture[0], texture[1])[0]
                         else:
                                 image = texture
 

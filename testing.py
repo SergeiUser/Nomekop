@@ -5,7 +5,7 @@ gravity = -2
 
 
 
-windowDimensions = (1600, 800)
+windowDimensions = (1260, 630)
 gridSize = (20, 10)
 
 cellSize = [windowDimensions[x]/gridSize[x] for x in range(len(gridSize))]
@@ -27,7 +27,7 @@ health = 100
 for x in range(len(towersInScene)):
         print(f"Tower {x} is: {type(towersInScene[x])}")
 
-enemyTypes = [enemies.enemy,enemies.sergei]
+enemyTypes = [enemies.sergei,enemies.enemy]
 # Generator for enemies
 enemiesInScene = [random.choice(enemyTypes)(
         window,
@@ -35,7 +35,7 @@ enemiesInScene = [random.choice(enemyTypes)(
         y = (windowDimensions[1]/3) * random.random() + windowDimensions[1]/3,
         cellSize=cellSize,
         speed = random.uniform(1,2)
-        ) for x in range(0, 10)]
+        ) for x in range(50)]
 
 for enemy in enemiesInScene:
         enemy.init()
@@ -64,7 +64,7 @@ while run:
                         print(mouseCell)
                         if tilemap.tilemap[int(mouseCell[1])][int(mouseCell[0])] == 1:
                                 if pygame.mouse.get_pressed()[0]: # Creates tower on left click
-                                        towersInScene.append(towers.arrow(window, position=mouseCell, cellSize=cellSize))
+                                        towersInScene.append(towers.quickArrow(window, position=mouseCell, cellSize=cellSize))
 
                                 elif pygame.mouse.get_pressed()[2]: # Deletes right clicked tower
                                         x = 0
@@ -74,16 +74,17 @@ while run:
                                                 else:
                                                         x += 1
                 if pygame.key.get_pressed()[pygame.K_SPACE]:
-                        enemiesInScene.append(enemies.enemy(
+                        enemiesInScene.append(random.choice(enemyTypes)(
                                         window,
                                         x = windowDimensions[0] * random.random(),
                                         y = (windowDimensions[1]/3) * random.random() + windowDimensions[1]/3,
                                         cellSize=cellSize,
-                                        speed = random.randint(2,5)
-                        ))
+                                        speed = random.uniform(1,2)
+                                        ) 
+                        )  
 
         for tower in towersInScene: #Draws cooldown circle for each tower
-                tower.drawCooldown(False)
+                tower.drawCooldown(True)
                 # False: Fills whole circle at once as cooldownCounter decreases
                 # True : Fills circle in by quadrant as cooldownCounter decreases
 

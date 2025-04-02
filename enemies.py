@@ -1,4 +1,4 @@
-from random import randint, choice
+from random import randint, choice, uniform
 from pygame import draw as pygameDraw
 from math import dist
 from paths import paths
@@ -15,6 +15,10 @@ class enemy:
                 self.speed = speed
                 self.reward = reward
                 self.level = 0
+                self.offset = [
+                        uniform(-15,50),
+                        uniform(-15,50)
+                ]
 
                 self.path = choice(paths[const.map])
 
@@ -64,6 +68,7 @@ class enemy:
                 for i in range(len(self.cellSize)):
                         pos[i] = pos[i] * self.cellSize[i]
                         pos[i] = pos[i] + self.cellSize[i]/2
+                        pos[i] = pos[i] + self.offset[i]
                 speedModifier = pathingNode[1]
 
 
@@ -108,7 +113,7 @@ class enemy:
 class sergei(enemy):
         def init(self):
                 self.level = 3
-                self.speed *= 2
+                self.speed *= 0.2
                 self.colour = (
                         randint(150, 255),
                         randint(0, 55),
