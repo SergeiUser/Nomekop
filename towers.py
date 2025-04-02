@@ -66,7 +66,7 @@ class towerBase:
                         else:
                                 # Top Left Quadrant filling
                                 pygameDraw.circle(self.surface, "darkgreen", (self.drawX + self.cellSize[0]/2, self.drawY + self.cellSize[1]/2), int(self.cellSize[0]), 0, True, False, True, True)
-                                pygameDraw.circle(self.surface, "darkgreen", (self.drawX + self.cellSize[0]/2, self.drawY + self.cellSize[1]/2), int(self.cellSize[0]*(towerCooldownPercentage-0.81)*3.5), 0, False, True)
+                                pygameDraw.circle(self.surface, "darkgreen", (self.drawX + self.cellSize[0]/2, self.drawY + self.cellSize[1]/2), int(self.cellSize[0]*(towerCooldownPercentage-0.85)*4), 0, False, True)
 
         def findClosestTarget(self, targets):
                 position = (self.drawX + self.cellSize[0]/2, self.drawY + self.cellSize[1]/2)
