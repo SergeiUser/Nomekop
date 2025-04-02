@@ -110,6 +110,9 @@ class arrow(towerBase):
         type = "arrow"
         damage = 5
 
+        def subDraw(self):
+                pass
+
         def draw(self):
                 self.drawBase()
                 # White Diamond vector drawing
@@ -125,9 +128,13 @@ class arrow(towerBase):
                         self.drawX + (self.cellSize[0]/3), self.drawY + (self.cellSize[1]/3),
                         self.cellSize[0]/3, self.cellSize[1]/3
                         ))
+                self.subDraw()
 class quickArrow(arrow):
         cooldownSpeed = 8
         damage = 2
+
+        def subDraw(self):
+                pygameDraw.circle(self.surface, "blue", ((self.position[0] * self.cellSize[0]) + self.cellSize[0]/2, (self.position[1] * self.cellSize[1])+ self.cellSize[1]/2), 5)
 
 
 class enemy:

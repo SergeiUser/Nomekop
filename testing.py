@@ -17,6 +17,10 @@ window = pygame.display.set_mode(windowDimensions)
 seed = random.randint(100000, 999999)
 
 towersInScene = []
+selectedTower ={
+                "cost":100,
+                "tower": towers.arrow
+        }
 
 money = 0
 health = 100
@@ -35,12 +39,12 @@ enemiesInScene = [random.choice(enemyTypes)(
         y = (windowDimensions[1]/3) * random.random() + windowDimensions[1]/3,
         cellSize=cellSize,
         speed = random.uniform(1,2)
-        ) for x in range(10)]
+        ) for x in range(50)]
 
 for enemy in enemiesInScene:
         enemy.init()
 
-#shop = objects.shop()
+shop = objects.shop(cellSize,window)
 cursor = objects.cursor(0,0)
 #enemies.append(cursor) # Makes cursor targettable by towers
 
@@ -50,6 +54,7 @@ while run:
         pygame.time.delay(10)
         tilemap.drawBackground(window, tilemapCellSize, seed)
         #window.fill((30, 30, 120))
+        shop.draw()
 
         for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -64,7 +69,13 @@ while run:
                         print(mouseCell)
                         if tilemap.tilemap[int(mouseCell[1])][int(mouseCell[0])] == 1:
                                 if pygame.mouse.get_pressed()[0]: # Creates tower on left click
-                                        towersInScene.append(towers.quickArrow(window, position=mouseCell, cellSize=cellSize))
+                                        isTower = False
+                                        for tower in towersInScene: # Finds towers in the same cell as the mouse and deletes them
+                                                if tower.position == mouseCell:
+                                                        isTower = True
+                                                        break
+                                        if not isTower:
+                                                towersInScene.append(selectedTower["tower"](window, position=mouseCell, cellSize=cellSize))
 
                                 elif pygame.mouse.get_pressed()[2]: # Deletes right clicked tower
                                         x = 0
@@ -73,6 +84,9 @@ while run:
                                                         del towersInScene[x]
                                                 else:
                                                         x += 1
+                        else:
+                                if pygame.mouse.get_pressed()[0] and mouseCell[0]>16: # Creates tower on left click
+                                        selectedTower = shop.click(cursor.position)
                 if pygame.key.get_pressed()[pygame.K_SPACE]:
                         enemiesInScene.append(random.choice(enemyTypes)(
                                         window,
@@ -80,8 +94,8 @@ while run:
                                         y = (windowDimensions[1]/3) * random.random() + windowDimensions[1]/3,
                                         cellSize=cellSize,
                                         speed = random.uniform(1,2)
-                                        ) 
-                        )  
+                                        )
+                        )
 
         for tower in towersInScene: #Draws cooldown circle for each tower
                 tower.drawCooldown(False)

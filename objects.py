@@ -43,15 +43,15 @@ class shop:
         items = [
         {
                 "item": "fireT",
-                "position":(18, 4),
+                "position":(11.32, 4),
                 "cost":100,
                 "tower": towers.arrow
         },
         {
                 "item": "waterT",
-                "position":(19, 4),
+                "position":(12.32, 4),
                 "cost":100,
-                "tower": towers.arrow
+                "tower": towers.quickArrow
         },
         {
                 "item": "earthT",
@@ -61,7 +61,7 @@ class shop:
         },
         {
                 "item": "airT",
-                "position":(19, 5),
+                "position":(20, 5),
                 "cost":100,
                 "tower": towers.arrow
         }
@@ -74,17 +74,22 @@ class shop:
 
         def draw(self):
                 for item in self.items:
-                        cellsize = (self.cellSize[0]*0.8,self.cellSize[1]*0.8)
+                        self.cellsize = (self.cellSize[0]*1.5,self.cellSize[1]*1.5)
                         position = item["position"]
-                        tower = item["tower"](self.display,cellSize=cellsize, position=item["position"])
+                        tower = item["tower"](self.display,cellSize=self.cellsize, position=position)
                         tower.draw()
 
         def click(self, mousePos):
                 mouseCell = (
-                        cursor.position[0] // self.cellSize[0],
-                        cursor.position[1] // self.cellSize[1]
+                        (mousePos[0] // self.cellsize[0]) + 0.32,
+                        (mousePos[1] // self.cellsize[1])
                         )
+                print(mouseCell)
                 for item in self.items:
+                        tempItem = item
+                        print(tempItem)
                         if item["position"] == mouseCell:
-                                return item
+                                print(tempItem)
+                                return tempItem
+                return self.items[0]
 
