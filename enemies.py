@@ -6,12 +6,13 @@ import constants as const
 class enemy:
         pathStage = 0
         state = "alive"
+        speed = 0.5
         def __init__(self, surface, x=0, y=0, position=[], health=10, damage=1, speed=1, cellSize=[10,10], reward = 10):
                 self.surface = surface
                 self.cellSize = cellSize
                 self.health = health
                 self.damage = damage
-                self.speed = speed
+                self.speed *= speed
                 self.reward = reward
                 self.level = 0
                 self.path = choice(paths[const.map])
@@ -19,9 +20,7 @@ class enemy:
 
 
                 x = 1 + (self.level * 0.25)
-                print(x)
                 self.size = (self.cellSize[0]/11) * x
-                print(self.size)
 
 
                 self.offset = [
@@ -117,15 +116,14 @@ class sergei(enemy):
                 self.level = 5
                 self.speed *= 0.2
                 self.reward = 25
+                self.damage = 5
                 self.colour = (
                         randint(150, 255),
                         randint(0, 55),
                         randint(0, 55)
                 )
                 x = 1 + (self.level * 0.25)
-                print(x)
                 self.size = (self.cellSize[0]/11) * x
-                print(self.size)
 
         def explode(self):
                 if self.health < 0:

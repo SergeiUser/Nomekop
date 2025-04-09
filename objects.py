@@ -50,19 +50,19 @@ class shop:
         {
                 "item": "waterT",
                 "position":(12.32, 3),
-                "cost":150,
+                "cost":500,
                 "tower": towers.water
         },
         {
                 "item": "fireT",
                 "position":(11.32, 4),
-                "cost":100,
+                "cost":125,
                 "tower": towers.fire
         },
         {
                 "item": "earthT",
                 "position":(12.32, 4),
-                "cost":100,
+                "cost":150,
                 "tower": towers.earth
         }
 ]
@@ -72,38 +72,34 @@ class shop:
                 self.display = display
                 self.cellSize = cellSize
 
-        def draw(self, money):
+        def draw(self, money, texts):
                 for item in self.items:
-                        self.cellsize = (self.cellSize[0]*1.5,self.cellSize[1]*1.5)
+                        self.cellSizeAdjusted = (self.cellSize[0]*1.5,self.cellSize[1]*1.5)
                         position = item["position"]
-                        tower = item["tower"](self.display,cellSize=self.cellsize, position=position)
+                        tower = item["tower"](self.display,cellSize=self.cellSizeAdjusted, position=position)
                         tower.init()
                         if money < item["cost"]:
                                 tower.type = "base"
+                        tower.shopPiece = True
                         tower.draw()
                         del tower
+                for text in texts:
+                        self.display.blit(text[0], (text[1][0]*self.cellSize[0], text[1][1]*self.cellSize[1]))
 
         def click(self, mousePos):
                 mouseCell = (
-                        (mousePos[0] // self.cellsize[0]) + 0.32,
-                        (mousePos[1] // self.cellsize[1])
+                        (mousePos[0] // self.cellSizeAdjusted[0]) + 0.32,
+                        (mousePos[1] // self.cellSizeAdjusted[1])
                         )
-                print(mouseCell)
                 for item in self.items:
-                        pygameDraw.rect(self.display, "red", (mouseCell[0]*self.cellsize[0], mouseCell[1]*self.cellsize[1], self.cellsize[0], self.cellsize[1]))
+                        #pygameDraw.rect(self.display, "red", (mouseCell[0]*self.cellSizeAdjusted[0], mouseCell[1]*self.cellSizeAdjusted[1], self.cellSizeAdjusted[0], self.cellSizeAdjusted[1]))
                         '''if item["position"] == mouseCell:
                                 print(item)
                                 return item
                                 '''
-                        print(mousePos)
-                        print(item["item"],self.cellsize[0] * (item["position"][0] -1))
-                        print(item["item"],self.cellsize[0] * (item["position"][0]))
-                        print(item["item"],self.cellsize[1] * (item["position"][1] -1))
-                        print(item["item"],self.cellsize[1] * (item["position"][1]))
 
-                        if mousePos[0] > self.cellsize[0] * item["position"][0] and mousePos[0] < self.cellsize[0] * (item["position"][0] + 1):
-                                if mousePos[1] > self.cellsize[1] * item["position"][1] and mousePos[1] < self.cellsize[1] * (item["position"][1] + 1):
-                                        print(item)
+                        if mousePos[0] > self.cellSizeAdjusted[0] * item["position"][0] and mousePos[0] < self.cellSizeAdjusted[0] * (item["position"][0] + 1):
+                                if mousePos[1] > self.cellSizeAdjusted[1] * item["position"][1] and mousePos[1] < self.cellSizeAdjusted[1] * (item["position"][1] + 1):
                                         return item
                 return self.items[0]
 
