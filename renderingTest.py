@@ -45,7 +45,7 @@ items = [
 ]
 #tower = items[0]["tower"](window,cellSize=cellSize, position=items[0]["position"])
 #tower.draw()
-shop.draw()
+shop.draw(1000)
 run = True
 while run:
         for event in pygame.event.get():

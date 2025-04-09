@@ -4,7 +4,6 @@ from math import dist
 from paths import paths
 import constants as const
 class enemy:
-
         pathStage = 0
         state = "alive"
         def __init__(self, surface, x=0, y=0, position=[], health=10, damage=1, speed=1, cellSize=[10,10], reward = 10):
@@ -46,7 +45,7 @@ class enemy:
                         randint(150, 255)
                 )
         def init(self):
-                pass
+                self.health = 4
 
 
         def sim(self):
@@ -114,6 +113,7 @@ class enemy:
 
 class sergei(enemy):
         def init(self):
+                self.health = 16
                 self.level = 5
                 self.speed *= 0.2
                 self.reward = 25

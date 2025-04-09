@@ -42,28 +42,28 @@ class stone:
 class shop:
         items = [
         {
-                "item": "fireT",
-                "position":(11.32, 4),
-                "cost":100,
-                "tower": towers.arrow
+                "item": "airT",
+                "position":(11.32, 3),
+                "cost":50,
+                "tower": towers.air
         },
         {
                 "item": "waterT",
-                "position":(12.32, 4),
+                "position":(12.32, 3),
                 "cost":150,
-                "tower": towers.quickArrow
+                "tower": towers.water
+        },
+        {
+                "item": "fireT",
+                "position":(11.32, 4),
+                "cost":100,
+                "tower": towers.fire
         },
         {
                 "item": "earthT",
-                "position":(18, 5),
+                "position":(12.32, 4),
                 "cost":100,
-                "tower": towers.arrow
-        },
-        {
-                "item": "airT",
-                "position":(20, 5),
-                "cost":100,
-                "tower": towers.arrow
+                "tower": towers.earth
         }
 ]
         money = 0
@@ -72,13 +72,16 @@ class shop:
                 self.display = display
                 self.cellSize = cellSize
 
-        def draw(self):
+        def draw(self, money):
                 for item in self.items:
                         self.cellsize = (self.cellSize[0]*1.5,self.cellSize[1]*1.5)
                         position = item["position"]
                         tower = item["tower"](self.display,cellSize=self.cellsize, position=position)
                         tower.init()
+                        if money < item["cost"]:
+                                tower.type = "base"
                         tower.draw()
+                        del tower
 
         def click(self, mousePos):
                 mouseCell = (
@@ -87,10 +90,20 @@ class shop:
                         )
                 print(mouseCell)
                 for item in self.items:
-                        tempItem = item
-                        print(tempItem)
-                        if item["position"] == mouseCell:
-                                print(tempItem)
-                                return tempItem
+                        pygameDraw.rect(self.display, "red", (mouseCell[0]*self.cellsize[0], mouseCell[1]*self.cellsize[1], self.cellsize[0], self.cellsize[1]))
+                        '''if item["position"] == mouseCell:
+                                print(item)
+                                return item
+                                '''
+                        print(mousePos)
+                        print(item["item"],self.cellsize[0] * (item["position"][0] -1))
+                        print(item["item"],self.cellsize[0] * (item["position"][0]))
+                        print(item["item"],self.cellsize[1] * (item["position"][1] -1))
+                        print(item["item"],self.cellsize[1] * (item["position"][1]))
+
+                        if mousePos[0] > self.cellsize[0] * item["position"][0] and mousePos[0] < self.cellsize[0] * (item["position"][0] + 1):
+                                if mousePos[1] > self.cellsize[1] * item["position"][1] and mousePos[1] < self.cellsize[1] * (item["position"][1] + 1):
+                                        print(item)
+                                        return item
                 return self.items[0]
 

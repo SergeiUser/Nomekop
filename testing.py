@@ -18,11 +18,13 @@ seed = random.randint(100000, 999999)
 
 towersInScene = []
 selectedTower ={
-                "cost":100,
-                "tower": towers.arrow
-        }
+        "item": "airT",
+        "position":(11.32, 3),
+        "cost":50,
+        "tower": towers.air
+}
 
-money = 100
+money = 150
 health = 100
 
 # Makes randomly placed towers
@@ -47,6 +49,7 @@ for enemy in enemiesInScene:
 shop = objects.shop(cellSize,window)
 cursor = objects.cursor(0,0)
 #enemies.append(cursor) # Makes cursor targettable by towers
+shop.draw(money)
 
 run = True
 while run:
@@ -54,7 +57,8 @@ while run:
         pygame.time.delay(10)
         tilemap.drawBackground(window, tilemapCellSize, seed)
         #window.fill((30, 30, 120))
-        shop.draw()
+        pygame.draw.rect(window, "green", (shop.cellsize[0] * selectedTower["position"][0], shop.cellsize[1] * selectedTower["position"][1], shop.cellsize[1], shop.cellsize[1]))
+        shop.draw(money)
 
         for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -129,8 +133,8 @@ while run:
                         x += 1
 
         pygame.display.update()
-print(f"Enemy Count: {len(enemiesInScene)}")
+#print(f"Enemy Count: {len(enemiesInScene)}")
 x = 0
 for enemy in enemiesInScene:
         x += 1
-        print(f"Enemy {x} Pos: {tuple(enemy.position)}\nSpeed: {enemy.speed}")
+        #print(f"Enemy {x} Pos: {tuple(enemy.position)}\nSpeed: {enemy.speed}")
