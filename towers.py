@@ -101,6 +101,7 @@ class towerBase:
                                 ((self.cellSize[0]/3)*self.towerCooldownPercentage)-1, self.cellSize[1]/9
                                 ))
         def findClosestTarget(self, targets):
+                self.targets = targets
                 position = (self.drawX + self.cellSize[0]/2, self.drawY + self.cellSize[1]/2)
 
                 if self.cooldownCounter < -2: # Prevents cooldownCounter from going into the negatives & cooldown circle from growing exponentially
@@ -210,7 +211,18 @@ class fire(arrow):
 
                 if self.cooldownCounter < 0 and math.dist(targetPos, position) < self.range * ((self.cellSize[0]+self.cellSize[1])/2) and self.drawLine: # If off cooldown then attack & Reset cooldownCounter
                         self.cooldownCounter = self.cooldown
-                        self.target.health -= self.damage
+                        hits = [self.target]
+                        for target in self.targets:
+                                if math.dist(targetPos, position) < self.range and target != self.target:
+                                        c1 = (cone[1][0] - position[0]) * (target.position[1] - position[1]) - (cone[1][0] - position[1]) * (target.position[0] - position[0])
+                                        c2 = (cone[2][0] - cone[1][0]) * (target.position[1] - cone[1][1]) - (cone[1][0] - cone[1][0]) * (target.position[0] - cone[1][0])
+                                        c3 = (position[0] - cone[2][0]) * (target.position[1] - cone[2][1]) - (position[1] - cone[1][0]) * (target.position[0] - cone[2][0])
+
+                                        if (c1 < 0 and c2 < 0 and c3 < 0) or (c1 > 0 and c2 > 0 and c3 > 0):
+                                                hits.append(target)
+
+                        for target in hits:
+                                target.health -= self.damage
 
                 else: # Ticks cooldownCounter down & Stops drawing line
                         self.drawLine = False
