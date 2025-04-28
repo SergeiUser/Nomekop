@@ -79,6 +79,7 @@ class enemy:
 
                 if dist(tuple(self.position), pos) <= self.speed * speedModifier:
                         self.pathStage += 1#= (self.pathStage + 1) % (len(self.path))
+                        self.offset[1] =  uniform(3* -self.size,3* self.size)
                         return
 
 

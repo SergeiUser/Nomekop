@@ -103,3 +103,26 @@ class shop:
                                         return item
                 return self.items[0]
 
+class button:
+        def __init__(self, cellSize, display, command:function, position, dimensions:tuple, colour):
+                self.display = display
+                self.cellSize = cellSize
+                self.position = position
+                self.dimensions = dimensions
+                self.colour = colour
+
+        def draw(self):
+                pygameDraw.rect(self.display, self.colour, (self.position[0]*self.cellSize[0], self.position[1]*self.cellSize[1], self.dimensions[0]*self.cellSize[0], self.dimensions[1]*self.cellSize[1]))
+        
+        def click(self, mousePos):
+                mouseCell = (
+                (mousePos[0] // self.cellSize[0]),
+                (mousePos[1] // self.cellSize[1])
+                )
+                if mouseCell == self.position:
+                        return self.command
+                elif mouseCell[0] >= self.position[0] or mouseCell[0] <= self.position[0] + self.dimensions[0]:
+                        if mouseCell[1] >= self.position[1] or mouseCell[1] <= self.position[1] + self.dimensions[1]:
+                                return self.command
+                else:
+                        return None
