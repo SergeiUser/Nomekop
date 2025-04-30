@@ -23,6 +23,20 @@ levelColours=[
         (55,155,55)
 ]
 
+def triangleArea(points, altPoint =[0,0], altPointReplace =-1, clampArea = 99999):
+        points = list(points)
+        if altPointReplace != -1:
+                points[altPointReplace] = altPoint
+
+        x = abs(points[0][0]*(points[1][1] - points[2][1]))
+        y = abs(points[1][0]*(points[2][1] - points[0][1]))
+        z = abs(points[2][0]*(points[0][1] - points[1][1]))/2
+
+        a = x + y + z
+        if a < clampArea:
+                return a
+        else:
+                return False
 
 # Base class for all towers
 class towerBase:
@@ -224,13 +238,15 @@ class fire(arrow):
                 if self.cooldownCounter < 0 and math.dist(targetPos, position) < self.range * ((self.cellSize[0]+self.cellSize[1])/2) and self.drawLine: # If off cooldown then attack & Reset cooldownCounter
                         self.cooldownCounter = self.cooldown
                         hits = [self.target]
-                        for target in self.targets:
-                                if math.dist(targetPos, position) < self.range and target != self.target:
-                                        c1 = (cone[1][0] - position[0]) * (target.position[1] - position[1]) - (cone[1][0] - position[1]) * (target.position[0] - position[0])
-                                        c2 = (cone[2][0] - cone[1][0]) * (target.position[1] - cone[1][1]) - (cone[1][0] - cone[1][0]) * (target.position[0] - cone[1][0])
-                                        c3 = (position[0] - cone[2][0]) * (target.position[1] - cone[2][1]) - (position[1] - cone[1][0]) * (target.position[0] - cone[2][0])
+                        tArea = triangleArea(self.cone)
 
-                                        if (c1 < 0 and c2 < 0 and c3 < 0) or (c1 > 0 and c2 > 0 and c3 > 0):
+                        for target in self.targets:
+                                if math.dist(targetPos, position) < self.range*1.5 and target != self.target:
+                                        a1 = triangleArea(self.cone, targetPos, 0)
+                                        a2 = triangleArea(self.cone, targetPos, 1)
+                                        a3 = triangleArea(self.cone, targetPos, 2)
+
+                                        if not False in [a1,a2,a3] and math.dist((a1+a2+a3, 0), (tArea,0)) < 10:
                                                 hits.append(target)
 
                         for target in hits:

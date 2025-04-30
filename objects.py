@@ -104,7 +104,7 @@ class shop:
                 return self.items[0]
 
 class button:
-        def __init__(self, cellSize, display, command:function, position, dimensions:tuple, colour):
+        def __init__(self, cellSize, display, command, position, dimensions:tuple, colour):
                 self.display = display
                 self.cellSize = cellSize
                 self.position = position
@@ -113,7 +113,7 @@ class button:
 
         def draw(self):
                 pygameDraw.rect(self.display, self.colour, (self.position[0]*self.cellSize[0], self.position[1]*self.cellSize[1], self.dimensions[0]*self.cellSize[0], self.dimensions[1]*self.cellSize[1]))
-        
+
         def click(self, mousePos):
                 mouseCell = (
                 (mousePos[0] // self.cellSize[0]),
