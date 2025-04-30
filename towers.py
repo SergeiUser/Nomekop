@@ -30,13 +30,17 @@ def triangleArea(points, altPoint =[0,0], altPointReplace =-1, clampArea = 99999
 
         x = abs(points[0][0]*(points[1][1] - points[2][1]))
         y = abs(points[1][0]*(points[2][1] - points[0][1]))
-        z = abs(points[2][0]*(points[0][1] - points[1][1]))/2
+        z = abs(points[2][0]*(points[0][1] - points[1][1]))
 
         a = x + y + z
+        a/=2
+        '''
         if a < clampArea:
                 return a
         else:
                 return False
+        '''
+        return a
 
 # Base class for all towers
 class towerBase:
@@ -237,17 +241,17 @@ class fire(arrow):
 
                 if self.cooldownCounter < 0 and math.dist(targetPos, position) < self.range * ((self.cellSize[0]+self.cellSize[1])/2) and self.drawLine: # If off cooldown then attack & Reset cooldownCounter
                         self.cooldownCounter = self.cooldown
-                        hits = [self.target]
+                        hits = []
                         tArea = triangleArea(self.cone)
 
                         for target in self.targets:
-                                if math.dist(targetPos, position) < self.range*1.5 and target != self.target:
-                                        a1 = triangleArea(self.cone, targetPos, 0)
-                                        a2 = triangleArea(self.cone, targetPos, 1)
-                                        a3 = triangleArea(self.cone, targetPos, 2)
-
-                                        if not False in [a1,a2,a3] and math.dist((a1+a2+a3, 0), (tArea,0)) < 10:
-                                                hits.append(target)
+                                a1 = triangleArea(self.cone, target.position, 0)
+                                a2 = triangleArea(self.cone, target.position, 1)
+                                a3 = triangleArea(self.cone, target.position, 2)
+                                print("\nSubTriangles: ",(a1+a2+a3)/2)
+                                print("Triangle Area: ", tArea)
+                                if math.dist(((a1+a2+a3)/2, 0), (tArea,0)) < 5000:
+                                        hits.append(target)
 
                         for target in hits:
                                 target.health -= self.damage

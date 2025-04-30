@@ -1,4 +1,4 @@
-import towers, enemies, objects, tilemap
+import towers, objects, tilemap, enemies
 import pygame, random
 
 
@@ -30,10 +30,10 @@ font = pygame.font.SysFont("Helvetica", int(cellSize[1]/2))
 
 levels = [500, 1250, 2000, 3000, 5000]
 
-money = 750
-health = 100
-points = 0
-level = 1
+moneyB = 75
+healthB = 100
+pointsB = 0
+levelB = 2
 
 # Makes randomly placed towers
 #towersInScene = [towers.arrow(window,position=[random.randint(0,gridSize[0]-1), random.randint(2,gridSize[1]-2)],cellSize=cellSize)for x in range(6)]
@@ -41,14 +41,99 @@ level = 1
 for x in range(len(towersInScene)):
         print(f"Tower {x} is: {type(towersInScene[x])}")
 
+def QUIT():
+        global run
+        global gameDelay
+        gameDelay = 0
+        run = False
 
+def START():
+        global startScreen
+        startScreen = False
+def SET_MAP1():
+        START()
+
+def SET_MAP2():
+        START()
+        
+run = True
+startScreen = True
 restart = True
 while restart:
         restart = False
-        money = 750
-        health = 100
-        points = 0
-        level = 1
+        buttons = [
+                objects.button(cellSize, window, QUIT,  (7,5.5), (5, 1), "red", font,("Quit Game", True, (20,0,20))),
+                objects.button(cellSize, window, START, (7,4), (5, 1), "green", font,("Play Game", True, (20,0,20)))
+        ]
+        for button in buttons:
+                button.init("START/QUIT")
+        while startScreen:
+                startScreen = run
+                for event in pygame.event.get():
+                        if event.type == pygame.QUIT:
+                                QUIT()
+                        if event.type == pygame.MOUSEBUTTONDOWN:
+                                for button in buttons:
+                                        print("\n")
+                                        mousePosition = pygame.mouse.get_pos()
+                                        execute = button.click(mousePosition)
+                                        print(execute)
+                                        if execute != None:
+                                                execute()
+
+                for button in buttons:
+                        button.draw()
+                pygame.display.update()
+
+        buttons = [
+                objects.button(cellSize, window, SET_MAP1, (7,5), (2, 2), "blue", font,("1", True, (20,0,20))),
+                objects.button(cellSize, window, SET_MAP2, (9.5,5), (2, 2), "blue", font,("2", True, (20,0,20)))
+        ]
+        gameDelay = 10
+
+        '''
+        for button in buttons:
+                button.init("mapSelector")
+        startScreen = run
+        window.fill("black")
+        while startScreen:
+                startScreen = run
+                for event in pygame.event.get():
+                        if event.type == pygame.QUIT:
+                                QUIT()
+                        if event.type == pygame.MOUSEBUTTONDOWN:
+                                for button in buttons:
+                                        print("\n")
+                                        mousePosition = pygame.mouse.get_pos()
+                                        execute = button.click(mousePosition)
+                                        print(execute)
+                                        if execute != None:
+                                                execute()
+
+                for button in buttons:
+                        button.draw()
+                pygame.display.update()
+        buttons = []
+        import tilemap, enemies
+        '''
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        money = moneyB
+        health = healthB
+        points = pointsB
+        level = levelB
         enemyTypes = [enemies.enemy, enemies.sergei]
         # Generator for enemies
         enemiesInScene = [enemyTypes[0](
@@ -67,7 +152,6 @@ while restart:
         #enemies.append(cursor) # Makes cursor targettable by towers
         shop.draw(money, [])
 
-        run = True
         while run:
                 if level > 5:
                         x = levels[-1]
@@ -205,7 +289,7 @@ while restart:
 
                 for event in pygame.event.get():
                         if event.type == pygame.QUIT:
-                                run = False
+                                QUIT()
                         if event.type == pygame.MOUSEBUTTONDOWN:
                                 #Cell that the mouse is in
                                 mouseCell = (
@@ -296,7 +380,7 @@ while restart:
         while run:
                 for event in pygame.event.get():
                         if event.type == pygame.QUIT:
-                                run = False
+                                QUIT()
                 keys = pygame.key.get_pressed()
                 if keys[pygame.K_SPACE]:
                         restart = True

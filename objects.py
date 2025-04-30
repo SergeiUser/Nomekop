@@ -104,25 +104,46 @@ class shop:
                 return self.items[0]
 
 class button:
-        def __init__(self, cellSize, display, command, position, dimensions:tuple, colour):
+        rotundness = 50
+        def __init__(self, cellSize, display, command, position, dimensions:tuple, colour, font, text):
                 self.display = display
                 self.cellSize = cellSize
                 self.position = position
                 self.dimensions = dimensions
                 self.colour = colour
+                self.command = command
+                self.font = font
+                self.textArguments = text
+                
+        def init(self,mode):
+                if mode == "START/QUIT":
+                        self.text =[
+                                self.font.render(self.textArguments[0],self.textArguments[1],self.textArguments[2]),
+                                [self.position[0]+4/3, self.position[1]+1/4]
+                        ]
+                elif mode == "mapSelector":
+                        self.text =[
+                                self.font.render(self.textArguments[0],self.textArguments[1],self.textArguments[2]),
+                                [self.position[0]+0.9, self.position[1]+0.75]
+                        ]
 
         def draw(self):
-                pygameDraw.rect(self.display, self.colour, (self.position[0]*self.cellSize[0], self.position[1]*self.cellSize[1], self.dimensions[0]*self.cellSize[0], self.dimensions[1]*self.cellSize[1]))
+                pygameDraw.rect(
+                        self.display,
+                        self.colour,
+                        (self.position[0]*self.cellSize[0], self.position[1]*self.cellSize[1], self.dimensions[0]*self.cellSize[0], self.dimensions[1]*self.cellSize[1]),
+                        0,
+                        self.rotundness,self.rotundness,self.rotundness,self.rotundness
+                        )
+                self.display.blit(self.text[0], (self.text[1][0]*self.cellSize[0], self.text[1][1]*self.cellSize[1]))
 
         def click(self, mousePos):
-                mouseCell = (
-                (mousePos[0] // self.cellSize[0]),
-                (mousePos[1] // self.cellSize[1])
-                )
-                if mouseCell == self.position:
+                
+                print(mousePos)
+                if mousePos == self.position:
                         return self.command
-                elif mouseCell[0] >= self.position[0] or mouseCell[0] <= self.position[0] + self.dimensions[0]:
-                        if mouseCell[1] >= self.position[1] or mouseCell[1] <= self.position[1] + self.dimensions[1]:
+                elif mousePos[0] >= self.position[0]*self.cellSize[0] and mousePos[0] <= (self.position[0] + self.dimensions[0])*self.cellSize[0]:
+                        if mousePos[1] >= self.position[1]*self.cellSize[1] and mousePos[1] <= (self.position[1] + self.dimensions[1])*self.cellSize[1]:
                                 return self.command
                 else:
-                        return None
+                        return print
