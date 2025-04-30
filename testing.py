@@ -8,7 +8,7 @@ gameTimer = 0
 gameDelay = 10
 
 
-windowDimensions = (1460, 730)
+windowDimensions = (1260, 630)
 gridSize = (20, 10)
 
 cellSize = [windowDimensions[x]/gridSize[x] for x in range(len(gridSize))]
@@ -30,7 +30,7 @@ font = pygame.font.SysFont("Helvetica", int(cellSize[1]/2))
 
 levels = [500, 1250, 2000, 3000, 5000]
 
-money = 275
+money = 750
 health = 100
 points = 0
 level = 1
@@ -49,7 +49,7 @@ enemiesInScene = [enemyTypes[0](
         y = (windowDimensions[1]/3) * random.random() + windowDimensions[1]/3,
         cellSize=cellSize,
         speed = (random.uniform(1,2)*(63/cellSize[0]))
-        ) for x in range(5)]
+        ) for x in range(1)]
 
 for enemy in enemiesInScene:
         enemy.init()
@@ -61,7 +61,13 @@ shop.draw(money, [])
 
 run = True
 while run:
-        if points > levels[level-1]:
+        if level > 5:
+                x = levels[-1]
+                y = level - 4
+                requirement = x * 2 * y
+        else:
+                requirement = levels[level-1]
+        if points > requirement:
                 level += 1
         spawnEnemy = False
         spawnedEnemies = []

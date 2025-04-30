@@ -141,6 +141,8 @@ class arrow(towerBase):
                         ))
                 self.subDraw()
         def attack(self):
+                if self.cooldownCounter > 50:
+                        return
                 position = (self.drawX + self.cellSize[0]/2, self.drawY + self.cellSize[1]/2)
                 targetPos = self.target.position
                 if self.cooldownCounter < 50 and math.dist(targetPos, position) < self.range * ((self.cellSize[0]+self.cellSize[1])/2) * 1.25: #Begins drawing line to self.target
@@ -178,35 +180,45 @@ class air(arrow):
                 self.type = "air"
                 self.damage = 3
 class fire(arrow):
-        angleOfAttack = 30
-        angle = 50
+        angleOfAttack = 25
+        angle = 0
         def init(self):
                 self.type = "fire"
                 self.damage = 4
                 self.cooldownSpeed = 2
+
         def attack(self):
-                if self.cooldownCounter > 50:
+                try:
+                        position = (self.drawX + self.cellSize[0]/2, self.drawY + self.cellSize[1]/2)
+                        targetPos = self.target.position
+                except:
                         return
+                self.angle = math.degrees(math.atan2(targetPos[1] - position[1], targetPos[0] - position[0]))
+
+
                 position = (self.drawX + self.cellSize[0]/2, self.drawY + self.cellSize[1]/2)
                 targetPos = self.target.position
 
-                cone = [position]
+                self.cone = [position]
 
-                width = math.cos(math.radians(90-self.angleOfAttack + self.angle)) * self.range * self.cellSize[0]
-                height = math.sin(math.radians(90-self.angleOfAttack + self.angle)) * self.range * self.cellSize[1]
+                width = math.cos(math.radians(self.angleOfAttack + self.angle)) * self.range * self.cellSize[0]*1.5
+                height = math.sin(math.radians(self.angleOfAttack + self.angle)) * self.range * self.cellSize[1]*1.5
                 x = position[0] + width
                 y = position[1] + height
-                cone.append((x,y))
+                self.cone.append((x,y))
 
-                width = math.cos(math.radians(90+self.angleOfAttack + self.angle)) * self.range * self.cellSize[0]
-                height = math.sin(math.radians(90+self.angleOfAttack) + self.angle) * self.range * self.cellSize[1]
+                width = math.cos(math.radians(-self.angleOfAttack + self.angle)) * self.range * self.cellSize[0]*1.5
+                height = math.sin(math.radians(-self.angleOfAttack + self.angle)) * self.range * self.cellSize[1]*1.5
                 x = position[0] + width
                 y = position[1] + height
-                cone.append((x,y))
+                self.cone.append((x,y))
 
 
 
-                if self.cooldownCounter < 50 and math.dist(targetPos, position) < self.range * ((self.cellSize[0]+self.cellSize[1])/2) * 1.25: #Begins drawing line to self.target
+                if self.cooldownCounter > 50:
+                        return
+
+                if self.cooldownCounter < 50 and math.dist(targetPos, position) < self.range * ((self.cellSize[0]+self.cellSize[1])/2): #Begins drawing line to self.target
                         self.drawLine = True
 
                 if self.cooldownCounter < 0 and math.dist(targetPos, position) < self.range * ((self.cellSize[0]+self.cellSize[1])/2) and self.drawLine: # If off cooldown then attack & Reset cooldownCounter
@@ -226,10 +238,8 @@ class fire(arrow):
 
                 else: # Ticks cooldownCounter down & Stops drawing line
                         self.drawLine = False
-                self.drawLine = True
 
-                pygameDraw.polygon(self.surface, (200, 100, 10), tuple(cone))
-                print(cone)
+                pygameDraw.polygon(self.surface, (200, 100, 10), tuple(self.cone))
 
                 if self.drawLine: #Draws line from tower to self.target if conditions are met
-                        pygameDraw.polygon(self.surface, (200, 100, 10), tuple(cone))
+                        pygameDraw.polygon(self.surface, (200, 100, 10), tuple(self.cone), 2)
